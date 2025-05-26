@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Mathematics;
 
 // Filled-triangle arrow formation: row 0 is the tip (1 unit),
@@ -9,17 +9,17 @@ public class FilledArrowFormation : FormationBase
 	{
 	}
 
-	public override List<float3> CalculateFormationPositions(int unitCount, float3 targetPosition, float3 forward)
+	public override NativeArray<float3> CalculateFormationPositions(int unitCount, float3 targetPosition, float3 forward)
 	{
-		localOffsets.Clear();
-
 		if (unitCount <= 0)
 		{
-			return localOffsets;
+			return new NativeArray<float3>(0, Allocator.Temp);
 		}
 
+		var localOffsets = new NativeArray<float3>(unitCount, Allocator.Temp);
 		var placed = 0;
 		var row = 0;
+		var counter = 0;
 
 		// fill rows until we’ve placed all units
 		while (placed < unitCount)
@@ -32,22 +32,24 @@ public class FilledArrowFormation : FormationBase
 			{
 				var x = c * spacing;
 				var z = -row * spacing; // row 0 at z=0, row 1 at z=-spacing, etc.
-				localOffsets.Add(new float3(x, 0, z));
+				localOffsets[counter] = new float3(x, 0, z);
 				placed++;
+				counter++;
 			}
 
 			row++;
 		}
 
-		// rotate so “forward” → local +Z
+		// rotate so “forward” -> local +Z
 		var rot = math.normalize(
 			quaternion.LookRotationSafe(forward, new float3(0, 1, 0)));
 
 		// apply rotation + translate to world
-		var worldPositions = new List<float3>(unitCount);
-		foreach (var lo in localOffsets)
+		var worldPositions = new NativeArray<float3>(unitCount, Allocator.Temp);
+		for (var index = 0; index < localOffsets.Length; index++)
 		{
-			worldPositions.Add(targetPosition + math.mul(rot, lo));
+			var lo = localOffsets[index];
+			worldPositions[index] = targetPosition + math.mul(rot, lo);
 		}
 
 		return worldPositions;

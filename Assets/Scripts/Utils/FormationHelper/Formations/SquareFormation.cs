@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Mathematics;
 
 public class SquareFormation : FormationBase
@@ -7,9 +7,14 @@ public class SquareFormation : FormationBase
 	{
 	}
 
-	public override List<float3> CalculateFormationPositions(int unitCount, float3 targetPosition, float3 forward)
+	public override NativeArray<float3> CalculateFormationPositions(int unitCount, float3 targetPosition, float3 forward)
 	{
-		positions.Clear();
+		if (unitCount <= 0)
+		{
+			return new NativeArray<float3>(0, Allocator.Temp);
+		}
+
+		var positions = new NativeArray<float3>(unitCount, Allocator.Temp);
 		var cols = (int)math.ceil(math.sqrt(unitCount));
 		var rows = (int)math.ceil(unitCount / (float)cols);
 
@@ -25,7 +30,7 @@ public class SquareFormation : FormationBase
 			var zOffset = row * spacing - halfD;
 
 			var position = targetPosition + forward * zOffset + math.cross(forward, new float3(0, 1, 0)) * xOffset;
-			positions.Add(position);
+			positions[i] = position;
 		}
 
 		return positions;
