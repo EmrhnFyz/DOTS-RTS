@@ -106,6 +106,9 @@ public class UnitSelectionManager : MonoBehaviour
 		if (collisionWorld.CastRay(raycastInput, out var raycastHit))
 		{
 			_entityManager.SetComponentEnabled<Selected>(raycastHit.Entity, true);
+			var selected = _entityManager.GetComponentData<Selected>(raycastHit.Entity);
+			selected.onSelected = true;
+			_entityManager.SetComponentData(raycastHit.Entity, selected);
 		}
 	}
 
@@ -121,6 +124,9 @@ public class UnitSelectionManager : MonoBehaviour
 			if (selectionAreaRect.Contains(unitScreenPosition))
 			{
 				_entityManager.SetComponentEnabled<Selected>(entityArray[i], true);
+				var selected = _entityManager.GetComponentData<Selected>(entityArray[i]);
+				selected.onSelected = true;
+				_entityManager.SetComponentData(entityArray[i], selected);
 			}
 		}
 	}
@@ -128,9 +134,13 @@ public class UnitSelectionManager : MonoBehaviour
 	private void DeselectAllEntities(EntityQuery entityQuery)
 	{
 		var entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+		var selectedArray = entityQuery.ToComponentDataArray<Selected>(Allocator.Temp);
 		for (var i = 0; i < entityArray.Length; i++)
 		{
 			_entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
+			var selected = selectedArray[i];
+			selected.onDeselected = true;
+			_entityManager.SetComponentData(entityArray[i], selected);
 		}
 	}
 

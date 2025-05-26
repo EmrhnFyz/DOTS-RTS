@@ -2,21 +2,26 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(LateSimulationSystemGroup))]
+[UpdateBefore(typeof(ResetEventsSystem))]
 internal partial struct UnitSelectionSystem : ISystem
 {
 	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
-		foreach (var selected in SystemAPI.Query<RefRO<Selected>>().WithDisabled<Selected>())
+		foreach (var selected in SystemAPI.Query<RefRO<Selected>>().WithPresent<Selected>())
 		{
-			var selectionMarkTransform = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.selectionMark);
-			selectionMarkTransform.ValueRW.Scale = 0f;
-		}
+			if (selected.ValueRO.onDeselected)
+			{
+				var selectionMark = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.selectionMark);
+				selectionMark.ValueRW.Scale = 0f;
+			}
 
-		foreach (var selected in SystemAPI.Query<RefRO<Selected>>())
-		{
-			var selectionMarkTransform = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.selectionMark);
-			selectionMarkTransform.ValueRW.Scale = selected.ValueRO.showScale;
+			if (selected.ValueRO.onSelected)
+			{
+				var selectionMark = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.selectionMark);
+				selectionMark.ValueRW.Scale = selected.ValueRO.showScale;
+			}
 		}
 	}
 }
