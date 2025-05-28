@@ -24,7 +24,6 @@ public class UnitSelectionManager : MonoBehaviour
 
 	private readonly float _minSelectionBoxSize = 80;
 	private const float MAX_RAY_DISTANCE = 9999f;
-	private const int UNIT_LAYER = 6;
 
 	private void Awake()
 	{
@@ -99,7 +98,7 @@ public class UnitSelectionManager : MonoBehaviour
 			                   Filter = new CollisionFilter
 			                            {
 				                            BelongsTo = ~0u,
-				                            CollidesWith = 1u << UNIT_LAYER,
+				                            CollidesWith = 1u << GameConfig.UNIT_LAYER,
 				                            GroupIndex = 0
 			                            }
 		                   };
