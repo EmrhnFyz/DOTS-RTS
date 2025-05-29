@@ -15,8 +15,8 @@ public class UnitSelectionAuthoring : MonoBehaviour
 			var entity = GetEntity(TransformUsageFlags.Dynamic);
 			AddComponent(entity, new Selected
 			                     {
-				                     selectionMark = GetEntity(authoring._selectionMark, TransformUsageFlags.Dynamic),
-				                     showScale = authoring.showScale
+				                     SelectionMark = GetEntity(authoring._selectionMark, TransformUsageFlags.Dynamic),
+				                     ShowScale = authoring.showScale
 			                     });
 
 			SetComponentEnabled<Selected>(entity, false);
@@ -26,9 +26,9 @@ public class UnitSelectionAuthoring : MonoBehaviour
 
 public struct Selected : IComponentData, IEnableableComponent
 {
-	public Entity selectionMark;
-	public float showScale;
+	public Entity SelectionMark;
+	public float ShowScale;
 
-	public bool onSelected;
-	public bool onDeselected;
+	public bool OnSelected;
+	public bool OnDeselected;
 }

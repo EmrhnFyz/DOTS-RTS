@@ -17,12 +17,12 @@ public class HealthAuthoring : MonoBehaviour
 
 public struct Health : IComponentData
 {
-	public float maxHealth;
-	public float currentHealth;
+	public float MaxHealth;
+	public float CurrentHealth;
 
 	public Health(float maxHealth)
 	{
-		this.maxHealth = maxHealth;
-		currentHealth = maxHealth;
+		MaxHealth = maxHealth;
+		CurrentHealth = maxHealth;
 	}
 }

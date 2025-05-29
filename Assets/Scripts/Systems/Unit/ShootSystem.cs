@@ -5,6 +5,8 @@ using Unity.Transforms;
 
 internal partial struct ShootSystem : ISystem
 {
+	private EntitiesReferences _entitiesReferences;
+
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<EntitiesReferences>();
@@ -14,36 +16,54 @@ internal partial struct ShootSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-		foreach (var (localTransform, shoot, target) in SystemAPI.Query<RefRO<LocalTransform>, RefRW<Shoot>, RefRO<Target>>())
+		foreach (var (localTransform, shoot, target, findTarget, unitMover) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>())
 		{
-			if (target.ValueRO.targetEntity == Entity.Null)
+			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
 				continue;
 			}
 
-			shoot.ValueRW.timer -= SystemAPI.Time.DeltaTime;
+			var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity);
 
-			if (shoot.ValueRO.timer > 0f)
+			if (math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position) > findTarget.ValueRO.Range - 5f)
+			{
+				unitMover.ValueRW.TargetPosition = targetLocalTransform.Position;
+				continue;
+			}
+
+			unitMover.ValueRW.TargetPosition = localTransform.ValueRO.Position;
+			var aimDirection = math.normalize(targetLocalTransform.Position - localTransform.ValueRO.Position);
+
+			var targetRotation = quaternion.LookRotation(aimDirection, math.up());
+			localTransform.ValueRW.Rotation = math.slerp(localTransform.ValueRO.Rotation, targetRotation, SystemAPI.Time.DeltaTime * unitMover.ValueRO.RotationSpeed);
+
+			shoot.ValueRW.Timer -= SystemAPI.Time.DeltaTime;
+
+			if (shoot.ValueRO.Timer > 0f)
 			{
 				continue;
 			}
 
-			shoot.ValueRW.timer = shoot.ValueRO.cooldown;
+			shoot.ValueRW.Timer = shoot.ValueRO.Cooldown;
 
-			var bulletEntity = state.EntityManager.Instantiate(entitiesReferences.bulletPrefabEntity);
-			SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position + new float3(0, 1, 0)));
+
+			var bulletEntity = state.EntityManager.Instantiate(entitiesReferences.BulletPrefabEntity);
+
+			var bulletSpawnWorldPosition = localTransform.ValueRO.TransformPoint(shoot.ValueRO.NuzzleLocalPosition);
+
+			SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(bulletSpawnWorldPosition));
 			var bullet = SystemAPI.GetComponentRW<Bullet>(bulletEntity);
-			bullet.ValueRW.damageAmount = shoot.ValueRO.damageAmount;
+			bullet.ValueRW.DamageAmount = shoot.ValueRO.DamageAmount;
 
-			if (SystemAPI.HasComponent<LocalTransform>(target.ValueRO.targetEntity))
+			if (SystemAPI.HasComponent<LocalTransform>(target.ValueRO.TargetEntity))
 			{
-				var targetPosition = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity).Position;
-				bullet.ValueRW.direction = math.normalize(targetPosition - localTransform.ValueRO.Position);
+				var targetPosition = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity).Position;
+				bullet.ValueRW.Direction = math.normalize(targetPosition - localTransform.ValueRO.Position);
 			}
 			else
 			{
-				// Default forward direction if target doesn't exist
-				bullet.ValueRW.direction = math.forward();
+				// Default forward Direction if target doesn't exist
+				bullet.ValueRW.Direction = math.forward();
 			}
 		}
 	}

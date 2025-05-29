@@ -106,7 +106,7 @@ public class UnitSelectionManager : MonoBehaviour
 		{
 			_entityManager.SetComponentEnabled<Selected>(raycastHit.Entity, true);
 			var selected = _entityManager.GetComponentData<Selected>(raycastHit.Entity);
-			selected.onSelected = true;
+			selected.OnSelected = true;
 			_entityManager.SetComponentData(raycastHit.Entity, selected);
 		}
 	}
@@ -124,7 +124,7 @@ public class UnitSelectionManager : MonoBehaviour
 			{
 				_entityManager.SetComponentEnabled<Selected>(entityArray[i], true);
 				var selected = _entityManager.GetComponentData<Selected>(entityArray[i]);
-				selected.onSelected = true;
+				selected.OnSelected = true;
 				_entityManager.SetComponentData(entityArray[i], selected);
 			}
 		}
@@ -138,7 +138,7 @@ public class UnitSelectionManager : MonoBehaviour
 		{
 			_entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
 			var selected = selectedArray[i];
-			selected.onDeselected = true;
+			selected.OnDeselected = true;
 			_entityManager.SetComponentData(entityArray[i], selected);
 		}
 	}

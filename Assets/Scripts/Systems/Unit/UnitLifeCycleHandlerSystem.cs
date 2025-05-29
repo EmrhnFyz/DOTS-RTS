@@ -15,7 +15,7 @@ internal partial struct UnitLifeCycleHandlerSystem : ISystem
 		var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
 		foreach (var (health, entity) in SystemAPI.Query<RefRO<Health>>().WithEntityAccess())
 		{
-			if (health.ValueRO.currentHealth <= 0)
+			if (health.ValueRO.CurrentHealth <= 0)
 			{
 				entityCommandBuffer.DestroyEntity(entity);
 			}

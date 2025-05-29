@@ -4,9 +4,9 @@ using UnityEngine;
 
 public struct UnitMover : IComponentData
 {
-	public float moveSpeed;
-	public float rotationSpeed;
-	public float3 targetPosition;
+	public float MoveSpeed;
+	public float RotationSpeed;
+	public float3 TargetPosition;
 }
 
 public class UnitMoverAuthoring : MonoBehaviour
@@ -21,8 +21,8 @@ public class UnitMoverAuthoring : MonoBehaviour
 			var entity = GetEntity(TransformUsageFlags.Dynamic);
 			AddComponent(entity, new UnitMover
 			                     {
-				                     moveSpeed = authoring.moveSpeed,
-				                     rotationSpeed = authoring.rotationSpeed
+				                     MoveSpeed = authoring.moveSpeed,
+				                     RotationSpeed = authoring.rotationSpeed
 			                     });
 		}
 	}

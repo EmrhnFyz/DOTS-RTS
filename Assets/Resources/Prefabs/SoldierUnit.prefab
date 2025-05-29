@@ -339,7 +339,7 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 4615452223568328948}
   m_AABB:
-    m_Center: {x: 0, y: 0, z: 1.35}
+    m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 1.2868505, y: 0.5250372, z: 1.2117192}
   m_DirtyAABB: 0
 --- !u!1 &2563928494826856992
@@ -1099,6 +1099,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6701745196713171045}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &7155281045448345573
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8571338259898278019}
+  m_Layer: 6
+  m_Name: Nuzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8571338259898278019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155281045448345573}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.5216312, y: -0.29298145, z: 0.73127866, w: 0.3275582}
+  m_LocalPosition: {x: 0.16163886, y: 2.9861393, z: 2.3300812}
+  m_LocalScale: {x: 1.4500012, y: 1.4500005, z: 1.4500002}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6338237279091323482}
+  m_LocalEulerAnglesHint: {x: 33.318, y: -144.472, z: -359.06}
 --- !u!1 &7234879854932066451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,7 +1363,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 836188322365552961, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       propertyPath: range
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 836188322365552961, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       propertyPath: targetFaction
@@ -1402,6 +1433,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3374118553169292783, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3572424886287826246}
+    - targetCorrespondingSourceObject: {fileID: 3374118553169292783, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8571338259898278019}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3374118553169064335, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       insertIndex: -1
@@ -1412,6 +1446,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3374118553169064335, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8567152311124155479}
+    - targetCorrespondingSourceObject: {fileID: 3374118553169064335, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7916936749802320739}
   m_SourcePrefab: {fileID: 100100000, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
 --- !u!4 &6338237279091323482 stripped
 Transform:
@@ -1451,6 +1488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 0.2
   damageAmount: 2
+  nuzzleTransform: {fileID: 8571338259898278019}
 --- !u!114 &8567152311124155479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1463,3 +1501,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd93ac9e60ed00e4ca95205468ca5a4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &7916936749802320739
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6338237279091813946}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: fcb334eb247ae3e488abb081c847cf09, type: 3}
+  m_Controller: {fileID: 9100000, guid: e9efc19d0b1cd9149b7b0abe66b45e12, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

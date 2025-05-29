@@ -1,10 +1,12 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class ShootAuthoring : MonoBehaviour
 {
 	public float cooldown = 0.2f;
 	public float damageAmount;
+	public Transform nuzzleTransform;
 
 	public class Baker : Baker<ShootAuthoring>
 	{
@@ -13,8 +15,9 @@ public class ShootAuthoring : MonoBehaviour
 			var entity = GetEntity(TransformUsageFlags.Dynamic);
 			AddComponent(entity, new Shoot
 			                     {
-				                     cooldown = authoring.cooldown,
-				                     damageAmount = authoring.damageAmount
+				                     Cooldown = authoring.cooldown,
+				                     DamageAmount = authoring.damageAmount,
+				                     NuzzleLocalPosition = authoring.nuzzleTransform.localPosition
 			                     });
 		}
 	}
@@ -22,7 +25,8 @@ public class ShootAuthoring : MonoBehaviour
 
 public struct Shoot : IComponentData
 {
-	public float cooldown;
-	public float timer;
-	public float damageAmount;
+	public float Cooldown;
+	public float Timer;
+	public float DamageAmount;
+	public float3 NuzzleLocalPosition;
 }

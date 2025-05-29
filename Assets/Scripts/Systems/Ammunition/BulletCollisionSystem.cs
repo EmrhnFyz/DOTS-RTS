@@ -63,7 +63,7 @@ internal partial struct BulletCollisionSystem : ISystem
 				}
 
 				var health = HealthLookup[entityB];
-				health.currentHealth -= BulletLookup[entityA].damageAmount;
+				health.CurrentHealth -= BulletLookup[entityA].DamageAmount;
 				HealthLookup[entityB] = health;
 
 				EntityCommandBuffer.DestroyEntity(entityA);
@@ -76,7 +76,7 @@ internal partial struct BulletCollisionSystem : ISystem
 				}
 
 				var health = HealthLookup[entityA];
-				health.currentHealth -= BulletLookup[entityB].damageAmount;
+				health.CurrentHealth -= BulletLookup[entityB].DamageAmount;
 				HealthLookup[entityA] = health;
 
 				EntityCommandBuffer.DestroyEntity(entityB);

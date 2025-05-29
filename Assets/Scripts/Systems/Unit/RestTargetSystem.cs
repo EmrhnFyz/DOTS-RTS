@@ -9,9 +9,9 @@ internal partial struct RestTargetSystem : ISystem
 	{
 		foreach (var target in SystemAPI.Query<RefRW<Target>>())
 		{
-			if (!SystemAPI.Exists(target.ValueRO.targetEntity))
+			if (!SystemAPI.Exists(target.ValueRO.TargetEntity))
 			{
-				target.ValueRW.targetEntity = Entity.Null;
+				target.ValueRW.TargetEntity = Entity.Null;
 			}
 		}
 	}

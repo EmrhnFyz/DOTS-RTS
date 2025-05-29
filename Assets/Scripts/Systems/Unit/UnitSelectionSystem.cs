@@ -11,16 +11,16 @@ internal partial struct UnitSelectionSystem : ISystem
 	{
 		foreach (var selected in SystemAPI.Query<RefRO<Selected>>().WithPresent<Selected>())
 		{
-			if (selected.ValueRO.onDeselected)
+			if (selected.ValueRO.OnDeselected)
 			{
-				var selectionMark = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.selectionMark);
+				var selectionMark = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.SelectionMark);
 				selectionMark.ValueRW.Scale = 0f;
 			}
 
-			if (selected.ValueRO.onSelected)
+			if (selected.ValueRO.OnSelected)
 			{
-				var selectionMark = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.selectionMark);
-				selectionMark.ValueRW.Scale = selected.ValueRO.showScale;
+				var selectionMark = SystemAPI.GetComponentRW<LocalTransform>(selected.ValueRO.SelectionMark);
+				selectionMark.ValueRW.Scale = selected.ValueRO.ShowScale;
 			}
 		}
 	}

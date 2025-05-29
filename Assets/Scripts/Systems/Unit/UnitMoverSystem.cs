@@ -24,7 +24,7 @@ public partial struct UnitMoverJob : IJobEntity
 
 	public void Execute(ref LocalTransform localTransform, in UnitMover unitMoverComponent, ref PhysicsVelocity physicsVelocity)
 	{
-		var moveDirection = unitMoverComponent.targetPosition - localTransform.Position;
+		var moveDirection = unitMoverComponent.TargetPosition - localTransform.Position;
 
 		var reachTargetDistanceSq = 1f;
 		if (math.lengthsq(moveDirection) < reachTargetDistanceSq)
@@ -40,8 +40,8 @@ public partial struct UnitMoverJob : IJobEntity
 
 		localTransform.Rotation = math.slerp(localTransform.Rotation,
 		                                     lookRotation,
-		                                     deltaTime * unitMoverComponent.rotationSpeed);
-		physicsVelocity.Linear = moveDirection * unitMoverComponent.moveSpeed;
+		                                     deltaTime * unitMoverComponent.RotationSpeed);
+		physicsVelocity.Linear = moveDirection * unitMoverComponent.MoveSpeed;
 		physicsVelocity.Angular = float3.zero;
 	}
 }

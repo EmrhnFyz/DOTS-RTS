@@ -17,15 +17,15 @@ internal partial struct BulletMoverSystem : ISystem
 
 		foreach (var (localTransform, bullet, entity) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Bullet>>().WithEntityAccess())
 		{
-			// Move in the set direction
-			var moveDistance = bullet.ValueRO.speed * deltaTime;
-			localTransform.ValueRW.Position += bullet.ValueRO.direction * moveDistance;
+			// Move in the set Direction
+			var moveDistance = bullet.ValueRO.Speed * deltaTime;
+			localTransform.ValueRW.Position += bullet.ValueRO.Direction * moveDistance;
 
 			// Track distance for cleanup
-			bullet.ValueRW.distanceTraveled += moveDistance;
+			bullet.ValueRW.DistanceTraveled += moveDistance;
 
 			// Destroy if max distance reached
-			if (bullet.ValueRO.distanceTraveled > bullet.ValueRO.maxDistance)
+			if (bullet.ValueRO.DistanceTraveled > bullet.ValueRO.MaxDistance)
 			{
 				entityCommandBuffer.DestroyEntity(entity);
 			}

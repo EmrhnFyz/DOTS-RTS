@@ -15,11 +15,11 @@ public class BulletAuthoring : MonoBehaviour
 			var entity = GetEntity(TransformUsageFlags.Dynamic);
 			AddComponent(entity, new Bullet
 			                     {
-				                     speed = authoring.speed,
-				                     damageAmount = authoring.damageAmount,
-				                     direction = float3.zero,
-				                     distanceTraveled = 0f,
-				                     maxDistance = authoring.maxDistance
+				                     Speed = authoring.speed,
+				                     DamageAmount = authoring.damageAmount,
+				                     Direction = float3.zero,
+				                     DistanceTraveled = 0f,
+				                     MaxDistance = authoring.maxDistance
 			                     });
 		}
 	}
@@ -27,10 +27,10 @@ public class BulletAuthoring : MonoBehaviour
 
 public struct Bullet : IComponentData
 {
-	public float speed;
-	public float damageAmount;
-	public float distanceTraveled;
-	public float maxDistance;
+	public float Speed;
+	public float DamageAmount;
+	public float DistanceTraveled;
+	public float MaxDistance;
 
-	public float3 direction;
+	public float3 Direction;
 }

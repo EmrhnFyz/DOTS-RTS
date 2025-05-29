@@ -14,9 +14,9 @@ public class FindTargetAuthoring : MonoBehaviour
 			var entity = GetEntity(TransformUsageFlags.Dynamic);
 			AddComponent(entity, new FindTarget
 			                     {
-				                     range = authoring.range,
-				                     cooldown = authoring.cooldown,
-				                     targetFaction = authoring.targetFaction
+				                     Range = authoring.range,
+				                     Cooldown = authoring.cooldown,
+				                     TargetFaction = authoring.targetFaction
 			                     });
 		}
 	}
@@ -24,8 +24,8 @@ public class FindTargetAuthoring : MonoBehaviour
 
 public struct FindTarget : IComponentData
 {
-	public float range;
-	public float timer;
-	public float cooldown;
-	public Factions targetFaction;
+	public float Range;
+	public float Timer;
+	public float Cooldown;
+	public Factions TargetFaction;
 }

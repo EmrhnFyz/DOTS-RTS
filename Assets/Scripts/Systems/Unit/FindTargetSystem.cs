@@ -37,12 +37,12 @@ internal partial struct FindTargetJob : IJobEntity
 
 	public void Execute(in LocalTransform localTransform, ref FindTarget findTarget, ref Target target)
 	{
-		findTarget.timer -= deltaTime;
-		// Only search for targets when timer expires
-		if (findTarget.timer <= 0f)
+		findTarget.Timer -= deltaTime;
+		// Only search for targets when Timer expires
+		if (findTarget.Timer <= 0f)
 		{
-			// Reset timer
-			findTarget.timer = findTarget.cooldown;
+			// Reset Timer
+			findTarget.Timer = findTarget.Cooldown;
 
 			var distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
 
@@ -53,7 +53,7 @@ internal partial struct FindTargetJob : IJobEntity
 				                      GroupIndex = 0
 			                      };
 
-			if (collisionWorld.OverlapSphere(localTransform.Position, findTarget.range, ref distanceHitList, collisionFilter))
+			if (collisionWorld.OverlapSphere(localTransform.Position, findTarget.Range, ref distanceHitList, collisionFilter))
 			{
 				var closestTarget = Entity.Null;
 				var closestDistanceSq = float.MaxValue;
@@ -65,7 +65,7 @@ internal partial struct FindTargetJob : IJobEntity
 					if (unitLookup.HasComponent(distanceHit.Entity))
 					{
 						var hitUnit = unitLookup[distanceHit.Entity];
-						if (findTarget.targetFaction == hitUnit.faction)
+						if (findTarget.TargetFaction == hitUnit.Faction)
 						{
 							var distanceSq = distanceHit.Distance * distanceHit.Distance;
 							if (distanceSq < closestDistanceSq)
@@ -77,7 +77,7 @@ internal partial struct FindTargetJob : IJobEntity
 					}
 				}
 
-				target.targetEntity = closestTarget;
+				target.TargetEntity = closestTarget;
 			}
 
 			distanceHitList.Dispose();

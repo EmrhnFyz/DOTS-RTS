@@ -81,12 +81,12 @@ public class UnitMoverManager : MonoBehaviour
 
 		// create formation based on the current formation type
 		var totalUnitCount = unitMoverArray.Length;
-		var direction = (mouseWorldPosition - (Vector3)unitMoverArray[0].targetPosition).normalized;
+		var direction = (mouseWorldPosition - (Vector3)unitMoverArray[0].TargetPosition).normalized;
 		var formation = _formations[_currentFormationType].CalculateFormationPositions(totalUnitCount, mouseWorldPosition, direction);
 		for (var i = 0; i < unitMoverArray.Length; i++)
 		{
 			var unitMover = unitMoverArray[i];
-			unitMover.targetPosition = formation[i];
+			unitMover.TargetPosition = formation[i];
 			unitMoverArray[i] = unitMover;
 		}
 

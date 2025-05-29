@@ -10,14 +10,14 @@ internal partial struct ResetTargetSystem : ISystem
 	{
 		foreach (var target in SystemAPI.Query<RefRW<Target>>())
 		{
-			if (target.ValueRO.targetEntity == Entity.Null)
+			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
 				continue;
 			}
 
-			if (!SystemAPI.Exists(target.ValueRO.targetEntity) || !SystemAPI.HasComponent<LocalTransform>(target.ValueRO.targetEntity))
+			if (!SystemAPI.Exists(target.ValueRO.TargetEntity) || !SystemAPI.HasComponent<LocalTransform>(target.ValueRO.TargetEntity))
 			{
-				target.ValueRW.targetEntity = Entity.Null;
+				target.ValueRW.TargetEntity = Entity.Null;
 			}
 		}
 	}
