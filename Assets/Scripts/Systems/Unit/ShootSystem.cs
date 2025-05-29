@@ -1,13 +1,20 @@
 using Unity.Burst;
 using Unity.Entities;
-using UnityEngine;
+using Unity.Mathematics;
+using Unity.Transforms;
 
 internal partial struct ShootSystem : ISystem
 {
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<EntitiesReferences>();
+	}
+
 	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
-		foreach (var (shoot, target) in SystemAPI.Query<RefRW<Shoot>, RefRO<Target>>())
+		var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+		foreach (var (localTransform, shoot, target) in SystemAPI.Query<RefRO<LocalTransform>, RefRW<Shoot>, RefRO<Target>>())
 		{
 			if (target.ValueRO.targetEntity == Entity.Null)
 			{
@@ -22,9 +29,22 @@ internal partial struct ShootSystem : ISystem
 			}
 
 			shoot.ValueRW.timer = shoot.ValueRO.cooldown;
-			var targetHealth = SystemAPI.GetComponentRW<Health>(target.ValueRO.targetEntity);
-			targetHealth.ValueRW.currentHealth -= shoot.ValueRO.damage;
-			Debug.Log($"BOOM! to {target.ValueRO.targetEntity} CurrentHealth: {targetHealth.ValueRW.currentHealth} / {targetHealth.ValueRW.maxHealth}");
+
+			var bulletEntity = state.EntityManager.Instantiate(entitiesReferences.bulletPrefabEntity);
+			SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position + new float3(0, 1, 0)));
+			var bullet = SystemAPI.GetComponentRW<Bullet>(bulletEntity);
+			bullet.ValueRW.damageAmount = shoot.ValueRO.damageAmount;
+
+			if (SystemAPI.HasComponent<LocalTransform>(target.ValueRO.targetEntity))
+			{
+				var targetPosition = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity).Position;
+				bullet.ValueRW.direction = math.normalize(targetPosition - localTransform.ValueRO.Position);
+			}
+			else
+			{
+				// Default forward direction if target doesn't exist
+				bullet.ValueRW.direction = math.forward();
+			}
 		}
 	}
 }

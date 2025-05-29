@@ -1450,7 +1450,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 0.2
-  damage: 1
+  damageAmount: 2
 --- !u!114 &8567152311124155479
 MonoBehaviour:
   m_ObjectHideFlags: 0

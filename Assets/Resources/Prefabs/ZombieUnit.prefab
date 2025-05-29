@@ -152,15 +152,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6980515354983832312, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       propertyPath: m_Height
-      value: 1.93
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6980515354983832312, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       propertyPath: m_Radius
-      value: 0.4
+      value: 0.64
       objectReference: {fileID: 0}
     - target: {fileID: 6980515354983832312, guid: c0c1aa945e1118c4ca582851097f96fe, type: 3}
       propertyPath: m_Center.y
-      value: 0.82
+      value: 2.07
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
