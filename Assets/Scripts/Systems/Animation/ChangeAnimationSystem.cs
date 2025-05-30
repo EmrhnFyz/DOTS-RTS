@@ -15,27 +15,40 @@ internal partial struct ChangeAnimationSystem : ISystem
 	{
 		var animationDataHolder = SystemAPI.GetSingleton<AnimationDataHolder>();
 
-		foreach (var (activeAnimation, materialMeshInfo) in SystemAPI.Query<RefRW<ActiveAnimation>, RefRW<MaterialMeshInfo>>())
+		var changeAnimationJob = new ChangeAnimationJob
+		                         {
+			                         AnimationDataBlobArrayBlobAssetReference = animationDataHolder.AnimationDataBlobArrayBlobAssetReference
+		                         };
+
+		changeAnimationJob.ScheduleParallel();
+	}
+}
+
+[BurstCompile]
+public partial struct ChangeAnimationJob : IJobEntity
+{
+	public BlobAssetReference<BlobArray<AnimationData>> AnimationDataBlobArrayBlobAssetReference;
+
+	public void Execute(ref ActiveAnimation activeAnimation, ref MaterialMeshInfo materialMeshInfo)
+	{
+		if (activeAnimation.ActiveAnimationType == AnimationType.SoldierShoot)
 		{
-			if (activeAnimation.ValueRO.ActiveAnimationType == AnimationType.SoldierShoot)
-			{
-				continue;
-			}
+			return;
+		}
 
-			if (activeAnimation.ValueRO.ActiveAnimationType == AnimationType.ZombieAttack)
-			{
-				continue;
-			}
+		if (activeAnimation.ActiveAnimationType == AnimationType.ZombieAttack)
+		{
+			return;
+		}
 
-			if (activeAnimation.ValueRO.ActiveAnimationType != activeAnimation.ValueRO.NextAnimationType)
-			{
-				activeAnimation.ValueRW.Frame = 0;
-				activeAnimation.ValueRW.FrameTimer = 0f;
-				activeAnimation.ValueRW.ActiveAnimationType = activeAnimation.ValueRO.NextAnimationType;
+		if (activeAnimation.ActiveAnimationType != activeAnimation.NextAnimationType)
+		{
+			activeAnimation.Frame = 0;
+			activeAnimation.FrameTimer = 0f;
+			activeAnimation.ActiveAnimationType = activeAnimation.NextAnimationType;
 
-				ref var animationData = ref animationDataHolder.AnimationDataBlobArrayBlobAssetReference.Value[(int)activeAnimation.ValueRO.ActiveAnimationType];
-				materialMeshInfo.ValueRW.MeshID = animationData.BatchMeshIdBlobArray[0];
-			}
+			ref var animationData = ref AnimationDataBlobArrayBlobAssetReference.Value[(int)activeAnimation.ActiveAnimationType];
+			materialMeshInfo.MeshID = animationData.BatchMeshIdBlobArray[0];
 		}
 	}
 }

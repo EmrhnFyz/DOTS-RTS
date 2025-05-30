@@ -14,29 +14,44 @@ internal partial struct ActiveAnimationSystem : ISystem
 	{
 		var animationDataHolder = SystemAPI.GetSingleton<AnimationDataHolder>();
 
-		foreach (var (activeAnimation, materialMeshInfo) in SystemAPI.Query<RefRW<ActiveAnimation>, RefRW<MaterialMeshInfo>>())
+		var activeAnimationJob = new ActiveAnimationJob
+		                         {
+			                         DeltaTime = SystemAPI.Time.DeltaTime,
+			                         AnimationDataBlobArrayBlobAssetReference = animationDataHolder.AnimationDataBlobArrayBlobAssetReference
+		                         };
+
+		activeAnimationJob.ScheduleParallel();
+	}
+}
+
+[BurstCompile]
+public partial struct ActiveAnimationJob : IJobEntity
+{
+	public float DeltaTime;
+	public BlobAssetReference<BlobArray<AnimationData>> AnimationDataBlobArrayBlobAssetReference;
+
+	public void Execute(ref ActiveAnimation activeAnimation, ref MaterialMeshInfo materialMeshInfo)
+	{
+		ref var animationData = ref AnimationDataBlobArrayBlobAssetReference.Value[(int)activeAnimation.ActiveAnimationType];
+
+		activeAnimation.FrameTimer += DeltaTime;
+
+		if (activeAnimation.FrameTimer > animationData.FrameTimerMax)
 		{
-			activeAnimation.ValueRW.FrameTimer += SystemAPI.Time.DeltaTime;
+			activeAnimation.FrameTimer -= animationData.FrameTimerMax;
 
-			ref var animationData = ref animationDataHolder.AnimationDataBlobArrayBlobAssetReference.Value[(int)activeAnimation.ValueRW.ActiveAnimationType];
+			activeAnimation.Frame = (activeAnimation.Frame + 1) % animationData.FrameMax;
 
-			if (activeAnimation.ValueRW.FrameTimer > animationData.FrameTimerMax)
+			materialMeshInfo.MeshID = animationData.BatchMeshIdBlobArray[activeAnimation.Frame];
+
+			if (activeAnimation.Frame == 0 && activeAnimation.ActiveAnimationType == AnimationType.SoldierShoot)
 			{
-				activeAnimation.ValueRW.FrameTimer -= animationData.FrameTimerMax;
+				activeAnimation.ActiveAnimationType = AnimationType.None;
+			}
 
-				activeAnimation.ValueRW.Frame = (activeAnimation.ValueRW.Frame + 1) % animationData.FrameMax;
-
-				materialMeshInfo.ValueRW.MeshID = animationData.BatchMeshIdBlobArray[activeAnimation.ValueRO.Frame];
-
-				if (activeAnimation.ValueRO is { Frame: 0, ActiveAnimationType: AnimationType.SoldierShoot })
-				{
-					activeAnimation.ValueRW.ActiveAnimationType = AnimationType.None;
-				}
-
-				if (activeAnimation.ValueRO is { Frame: 0, ActiveAnimationType: AnimationType.ZombieAttack })
-				{
-					activeAnimation.ValueRW.ActiveAnimationType = AnimationType.None;
-				}
+			if (activeAnimation.Frame == 0 && activeAnimation.ActiveAnimationType == AnimationType.ZombieAttack)
+			{
+				activeAnimation.ActiveAnimationType = AnimationType.None;
 			}
 		}
 	}
