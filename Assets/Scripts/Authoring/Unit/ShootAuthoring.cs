@@ -28,5 +28,14 @@ public struct Shoot : IComponentData
 	public float Cooldown;
 	public float Timer;
 	public float DamageAmount;
+
 	public float3 NuzzleLocalPosition;
+
+	public OnShootEvent OnShoot;
+
+	public struct OnShootEvent
+	{
+		public bool IsTriggered;
+		public float3 ShootFromPosition;
+	}
 }

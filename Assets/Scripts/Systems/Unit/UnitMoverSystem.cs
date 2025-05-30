@@ -26,8 +26,7 @@ public partial struct UnitMoverJob : IJobEntity
 	{
 		var moveDirection = unitMoverComponent.TargetPosition - localTransform.Position;
 
-		var reachTargetDistanceSq = 1f;
-		if (math.lengthsq(moveDirection) < reachTargetDistanceSq)
+		if (math.lengthsq(moveDirection) <= GameConfig.REACH_TARGET_DISTANCE_SQ)
 		{
 			physicsVelocity.Linear = float3.zero;
 			physicsVelocity.Angular = float3.zero;

@@ -65,6 +65,9 @@ internal partial struct ShootSystem : ISystem
 				// Default forward Direction if target doesn't exist
 				bullet.ValueRW.Direction = math.forward();
 			}
+
+			shoot.ValueRW.OnShoot.IsTriggered = true;
+			shoot.ValueRW.OnShoot.ShootFromPosition = bulletSpawnWorldPosition;
 		}
 	}
 }
