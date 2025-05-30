@@ -71,25 +71,28 @@ public class UnitMoverManager : MonoBehaviour
 	private void MoveToSelectedPosition(InputAction.CallbackContext context)
 	{
 		var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
-		var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<UnitMover, Selected>().Build(_entityManager);
-		var unitMoverArray = entityQuery.ToComponentDataArray<UnitMover>(Allocator.Temp);
+		var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<MoveOverride>().Build(_entityManager);
 
-		if (unitMoverArray.Length == 0)
+		var entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+		var moveOverrideArray = entityQuery.ToComponentDataArray<MoveOverride>(Allocator.Temp);
+
+		if (moveOverrideArray.Length == 0)
 		{
 			return;
 		}
 
 		// create formation based on the current formation type
-		var totalUnitCount = unitMoverArray.Length;
-		var direction = (mouseWorldPosition - (Vector3)unitMoverArray[0].TargetPosition).normalized;
+		var totalUnitCount = moveOverrideArray.Length;
+		var direction = (mouseWorldPosition - (Vector3)moveOverrideArray[0].TargetPosition).normalized;
 		var formation = _formations[_currentFormationType].CalculateFormationPositions(totalUnitCount, mouseWorldPosition, direction);
-		for (var i = 0; i < unitMoverArray.Length; i++)
+		for (var i = 0; i < moveOverrideArray.Length; i++)
 		{
-			var unitMover = unitMoverArray[i];
-			unitMover.TargetPosition = formation[i];
-			unitMoverArray[i] = unitMover;
+			var moveOverride = moveOverrideArray[i];
+			moveOverride.TargetPosition = formation[i];
+			moveOverrideArray[i] = moveOverride;
+			_entityManager.SetComponentEnabled<MoveOverride>(entityArray[i], true);
 		}
 
-		entityQuery.CopyFromComponentDataArray(unitMoverArray);
+		entityQuery.CopyFromComponentDataArray(moveOverrideArray);
 	}
 }

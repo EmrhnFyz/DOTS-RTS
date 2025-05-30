@@ -16,7 +16,8 @@ internal partial struct ShootSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-		foreach (var (localTransform, shoot, target, findTarget, unitMover) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>())
+		foreach (var (localTransform, shoot, target, findTarget, unitMover)
+		         in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>().WithDisabled<MoveOverride>())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
