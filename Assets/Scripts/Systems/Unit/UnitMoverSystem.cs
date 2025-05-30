@@ -22,7 +22,7 @@ public partial struct UnitMoverJob : IJobEntity
 {
 	public float deltaTime;
 
-	public void Execute(ref LocalTransform localTransform, in UnitMover unitMoverComponent, ref PhysicsVelocity physicsVelocity)
+	public void Execute(ref LocalTransform localTransform, ref UnitMover unitMoverComponent, ref PhysicsVelocity physicsVelocity)
 	{
 		var moveDirection = unitMoverComponent.TargetPosition - localTransform.Position;
 
@@ -30,9 +30,11 @@ public partial struct UnitMoverJob : IJobEntity
 		{
 			physicsVelocity.Linear = float3.zero;
 			physicsVelocity.Angular = float3.zero;
-
+			unitMoverComponent.IsMoving = false;
 			return;
 		}
+
+		unitMoverComponent.IsMoving = true;
 
 		var lookRotation = quaternion.LookRotation(moveDirection, math.up());
 		moveDirection = math.lengthsq(moveDirection) > 0.0001f ? math.normalize(moveDirection) : float3.zero;

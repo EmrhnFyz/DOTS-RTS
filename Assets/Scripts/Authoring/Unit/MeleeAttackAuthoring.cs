@@ -28,4 +28,6 @@ public struct MeleeAttack : IComponentData
 	public float Cooldown;
 	public float DamageAmount;
 	public float ColliderSize;
+
+	public bool OnAttacked;
 }
