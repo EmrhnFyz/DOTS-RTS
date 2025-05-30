@@ -7,20 +7,37 @@ internal partial struct ResetEventsSystem : ISystem
 	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
-		foreach (var selected in SystemAPI.Query<RefRW<Selected>>().WithPresent<Selected>())
-		{
-			selected.ValueRW.OnSelected = false;
-			selected.ValueRW.OnDeselected = false;
-		}
+		new ResetSelectedEventsJob().ScheduleParallel();
+		new ResetHealthEventsJob().ScheduleParallel();
+		new ResetShootEventsJob().ScheduleParallel();
+	}
+}
 
-		foreach (var health in SystemAPI.Query<RefRW<Health>>())
-		{
-			health.ValueRW.OnHealthChanged = false;
-		}
+[BurstCompile]
+[WithPresent(typeof(Selected))]
+public partial struct ResetSelectedEventsJob : IJobEntity
+{
+	public void Execute(ref Selected selected)
+	{
+		selected.OnSelected = false;
+		selected.OnDeselected = false;
+	}
+}
 
-		foreach (var shoot in SystemAPI.Query<RefRW<Shoot>>())
-		{
-			shoot.ValueRW.OnShoot.IsTriggered = false;
-		}
+[BurstCompile]
+public partial struct ResetHealthEventsJob : IJobEntity
+{
+	public void Execute(ref Health health)
+	{
+		health.OnHealthChanged = false;
+	}
+}
+
+[BurstCompile]
+public partial struct ResetShootEventsJob : IJobEntity
+{
+	public void Execute(ref Shoot shoot)
+	{
+		shoot.OnShoot.IsTriggered = false;
 	}
 }
