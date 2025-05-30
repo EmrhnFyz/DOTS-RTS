@@ -11,7 +11,6 @@ public class UnitSelectionManager : MonoBehaviour
 	[SerializeField] private Vector2EventChannelSO _onSelectionBoxStarted;
 	[SerializeField] private Vector2EventChannelSO _onSelectionBoxEnded;
 
-	private Camera _mainCamera;
 	private PlayerInputActions _playerInputActions;
 
 	private InputAction _onLeftButtonPressed;
@@ -23,7 +22,6 @@ public class UnitSelectionManager : MonoBehaviour
 	private Vector2 _selectionEndPosition;
 
 	private readonly float _minSelectionBoxSize = 80;
-	private const float MAX_RAY_DISTANCE = 9999f;
 
 	private void Awake()
 	{
@@ -32,7 +30,6 @@ public class UnitSelectionManager : MonoBehaviour
 
 	private void Start()
 	{
-		_mainCamera = Camera.main;
 		_entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 	}
 
@@ -89,12 +86,12 @@ public class UnitSelectionManager : MonoBehaviour
 	{
 		var physicsWorldSingleton = entityQuery.GetSingleton<PhysicsWorldSingleton>();
 		var collisionWorld = physicsWorldSingleton.CollisionWorld;
-		var cameraRay = _mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+		var cameraRay = GameConfig.CachedCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
 		var raycastInput = new RaycastInput
 		                   {
 			                   Start = cameraRay.GetPoint(0.1f),
-			                   End = cameraRay.GetPoint(MAX_RAY_DISTANCE),
+			                   End = cameraRay.GetPoint(GameConfig.MAX_RAY_DISTANCE),
 			                   Filter = new CollisionFilter
 			                            {
 				                            BelongsTo = ~0u,
@@ -118,7 +115,7 @@ public class UnitSelectionManager : MonoBehaviour
 		for (var i = 0; i < localTransformArray.Length; i++)
 		{
 			var unitLocalTransform = localTransformArray[i];
-			var unitScreenPosition = _mainCamera.WorldToScreenPoint(unitLocalTransform.Position);
+			var unitScreenPosition = GameConfig.CachedCamera.WorldToScreenPoint(unitLocalTransform.Position);
 
 			if (selectionAreaRect.Contains(unitScreenPosition))
 			{

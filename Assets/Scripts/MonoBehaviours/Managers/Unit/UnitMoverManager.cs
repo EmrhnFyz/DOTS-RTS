@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Physics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -71,28 +72,85 @@ public class UnitMoverManager : MonoBehaviour
 	private void MoveToSelectedPosition(InputAction.CallbackContext context)
 	{
 		var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
-		var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<MoveOverride>().Build(_entityManager);
 
+		var isAttackingSingleTarget = OnEnemySelected();
+
+		if (!isAttackingSingleTarget)
+		{
+			var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<MoveOverride>().Build(_entityManager);
+			var entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+			var moveOverrideArray = entityQuery.ToComponentDataArray<MoveOverride>(Allocator.Temp);
+
+			if (moveOverrideArray.Length == 0)
+			{
+				return;
+			}
+
+			// create formation based on the current formation type
+			var totalUnitCount = moveOverrideArray.Length;
+			var direction = (mouseWorldPosition - (Vector3)moveOverrideArray[0].TargetPosition).normalized;
+			var formation = _formations[_currentFormationType].CalculateFormationPositions(totalUnitCount, mouseWorldPosition, direction);
+			for (var i = 0; i < moveOverrideArray.Length; i++)
+			{
+				var moveOverride = moveOverrideArray[i];
+				moveOverride.TargetPosition = formation[i];
+				moveOverrideArray[i] = moveOverride;
+				_entityManager.SetComponentEnabled<MoveOverride>(entityArray[i], true);
+			}
+
+			entityQuery.CopyFromComponentDataArray(moveOverrideArray);
+		}
+	}
+
+	private bool OnEnemySelected()
+	{
+		var entityQuery = _entityManager.CreateEntityQuery(typeof(PhysicsWorldSingleton));
+		var physicsWorldSingleton = entityQuery.GetSingleton<PhysicsWorldSingleton>();
+		var collisionWorld = physicsWorldSingleton.CollisionWorld;
+		var cameraRay = GameConfig.CachedCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+		var raycastInput = new RaycastInput
+		                   {
+			                   Start = cameraRay.GetPoint(0.1f),
+			                   End = cameraRay.GetPoint(GameConfig.MAX_RAY_DISTANCE),
+			                   Filter = new CollisionFilter
+			                            {
+				                            BelongsTo = ~0u,
+				                            CollidesWith = 1u << GameConfig.UNIT_LAYER,
+				                            GroupIndex = 0
+			                            }
+		                   };
+
+		if (!collisionWorld.CastRay(raycastInput, out var raycastHit))
+		{
+			return false;
+		}
+
+		if (!_entityManager.HasComponent<Unit>(raycastHit.Entity))
+		{
+			return false;
+		}
+
+		var clickedUnit = _entityManager.GetComponentData<Unit>(raycastHit.Entity);
+
+		if (clickedUnit.Faction != Factions.Enemy)
+		{
+			return false;
+		}
+
+		entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<TargetOverride>().Build(_entityManager);
 		var entityArray = entityQuery.ToEntityArray(Allocator.Temp);
-		var moveOverrideArray = entityQuery.ToComponentDataArray<MoveOverride>(Allocator.Temp);
+		var targetOverrideArray = entityQuery.ToComponentDataArray<TargetOverride>(Allocator.Temp);
 
-		if (moveOverrideArray.Length == 0)
+		for (var i = 0; i < targetOverrideArray.Length; i++)
 		{
-			return;
+			var targetOverride = targetOverrideArray[i];
+			targetOverride.TargetEntity = raycastHit.Entity;
+			targetOverrideArray[i] = targetOverride;
+			_entityManager.SetComponentEnabled<MoveOverride>(entityArray[i], false);
 		}
 
-		// create formation based on the current formation type
-		var totalUnitCount = moveOverrideArray.Length;
-		var direction = (mouseWorldPosition - (Vector3)moveOverrideArray[0].TargetPosition).normalized;
-		var formation = _formations[_currentFormationType].CalculateFormationPositions(totalUnitCount, mouseWorldPosition, direction);
-		for (var i = 0; i < moveOverrideArray.Length; i++)
-		{
-			var moveOverride = moveOverrideArray[i];
-			moveOverride.TargetPosition = formation[i];
-			moveOverrideArray[i] = moveOverride;
-			_entityManager.SetComponentEnabled<MoveOverride>(entityArray[i], true);
-		}
-
-		entityQuery.CopyFromComponentDataArray(moveOverrideArray);
+		entityQuery.CopyFromComponentDataArray(targetOverrideArray);
+		return true;
 	}
 }

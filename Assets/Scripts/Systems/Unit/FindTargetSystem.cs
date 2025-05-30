@@ -45,7 +45,7 @@ internal partial struct FindTargetJob : IJobEntity
 	[ReadOnly] public ComponentLookup<LocalTransform> TargetLocalTransformLookup;
 	[ReadOnly] public float DeltaTime;
 
-	public void Execute(in LocalTransform localTransform, ref FindTarget findTarget, ref Target target)
+	public void Execute(in LocalTransform localTransform, ref FindTarget findTarget, ref Target target, ref TargetOverride targetOverride)
 	{
 		findTarget.Timer -= DeltaTime;
 		// Only search for targets when Timer expires
@@ -53,6 +53,13 @@ internal partial struct FindTargetJob : IJobEntity
 		{
 			// Reset Timer
 			findTarget.Timer = findTarget.Cooldown;
+
+			if (targetOverride.TargetEntity != Entity.Null)
+			{
+				target.TargetEntity = targetOverride.TargetEntity;
+
+				return;
+			}
 
 			var distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
 

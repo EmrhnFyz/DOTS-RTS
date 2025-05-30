@@ -16,8 +16,8 @@ internal partial struct ShootSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-		foreach (var (localTransform, shoot, target, findTarget, unitMover)
-		         in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>().WithDisabled<MoveOverride>())
+		foreach (var (localTransform, shoot, target, findTarget, unitMover, entity)
+		         in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>().WithDisabled<MoveOverride>().WithEntityAccess())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
@@ -60,6 +60,13 @@ internal partial struct ShootSystem : ISystem
 			{
 				var targetPosition = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity).Position;
 				bullet.ValueRW.Direction = math.normalize(targetPosition - localTransform.ValueRO.Position);
+
+				var enemyTargetOverride = SystemAPI.GetComponentRW<TargetOverride>(target.ValueRO.TargetEntity);
+
+				if (enemyTargetOverride.ValueRO.TargetEntity == Entity.Null)
+				{
+					enemyTargetOverride.ValueRW.TargetEntity = entity;
+				}
 			}
 			else
 			{
