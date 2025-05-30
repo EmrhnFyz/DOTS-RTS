@@ -26,7 +26,7 @@ internal partial struct ShootSystem : ISystem
 
 			var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity);
 
-			if (math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position) > findTarget.ValueRO.Range - 5f)
+			if (math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position) > findTarget.ValueRO.Range - GameConfig.TARGET_PROXIMITY_TRESHOLD)
 			{
 				unitMover.ValueRW.TargetPosition = targetLocalTransform.Position;
 				continue;

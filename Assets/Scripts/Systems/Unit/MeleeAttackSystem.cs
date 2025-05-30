@@ -19,7 +19,8 @@ internal partial struct MeleeAttackSystem : ISystem
 		var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
 		var collisionWorld = physicsWorldSingleton.CollisionWorld;
 		var raycastHitList = new NativeList<RaycastHit>(Allocator.Temp);
-		foreach (var (localTransform, target, meleeAttack, unitMover) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<Target>, RefRW<MeleeAttack>, RefRW<UnitMover>>())
+		foreach (var (localTransform, target, meleeAttack, unitMover)
+		         in SystemAPI.Query<RefRO<LocalTransform>, RefRO<Target>, RefRW<MeleeAttack>, RefRW<UnitMover>>().WithDisabled<MoveOverride>())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
