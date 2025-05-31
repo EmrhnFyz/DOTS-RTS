@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0f08f5ffac9e8419d49049e8a7d364, type: 3}
   m_Name: Zombie_Walk
   m_EditorClassIdentifier: 
-  AnimationType: 4
+  AnimationType: 6
   meshArray:
   - {fileID: 4300000, guid: 945bee4ed8d09c440944162dc101ecd9, type: 2}
   - {fileID: 4300000, guid: 3d2b2c94fe5137b41b1fa7aeb9d5e894, type: 2}

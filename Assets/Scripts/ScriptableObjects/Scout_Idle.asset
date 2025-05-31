@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c0f08f5ffac9e8419d49049e8a7d364, type: 3}
-  m_Name: Soldier_Aim
+  m_Name: Scout_Idle
   m_EditorClassIdentifier: 
-  AnimationType: 3
+  AnimationType: 8
   meshArray:
-  - {fileID: 4300000, guid: e274e405c96af1740a3f6351f10189f9, type: 2}
+  - {fileID: 4300000, guid: 55d0ea4a7e7fde342a5441354243230f, type: 2}
+  - {fileID: 4300000, guid: afb0b62db96294d4fafc09cb819df484, type: 2}
   frameTimerMax: 0.5

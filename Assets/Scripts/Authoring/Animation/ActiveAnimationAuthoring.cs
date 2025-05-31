@@ -22,6 +22,7 @@ public struct ActiveAnimation : IComponentData
 {
 	public AnimationType ActiveAnimationType;
 	public AnimationType NextAnimationType;
+	
 	public int Frame;
 
 	public float FrameTimer;

@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 5757704311418296502}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.293, y: 1.932, z: 2.051}
+  m_LocalPosition: {x: -0.293, y: 2.019, z: 1.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -125,6 +125,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1818312586801504889, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: maxHealth
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493037212475000198, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2fee42491c6487e40817139d4744d24c, type: 2}
     - target: {fileID: 5051571738441844746, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -167,11 +175,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5593724510191427445, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: aimAnimationType
-      value: 3
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593724510191427445, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: idleAnimationType
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5593724510191427445, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: walkAnimationType
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5593724510191427445, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: shootAnimationType
-      value: 4
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 6151115344386756265, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_Height
@@ -181,9 +197,13 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6193176710345390012, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 8eea152ffde69634f9304062310c371a, type: 2}
     - target: {fileID: 6673234106719524852, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: range
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6673234106719524852, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: targetFaction
@@ -193,9 +213,17 @@ PrefabInstance:
       propertyPath: loseTargetDistance
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 7046735670288218313, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: moveSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046735670288218313, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: rotationSpeed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8451252528002914600, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_Name
-      value: SoldierUnit
+      value: ScoutUnit
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -253,8 +281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c213f80f8238ba340804e2ebd04e77a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0.2
-  damageAmount: 4
+  cooldown: 0.3
+  damageAmount: 2
   nuzzleTransform: {fileID: 7029701560947915679}
 --- !u!114 &4626826308338028288
 MonoBehaviour:

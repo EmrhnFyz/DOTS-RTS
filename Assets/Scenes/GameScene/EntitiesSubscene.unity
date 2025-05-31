@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationDataListSO: {fileID: 11400000, guid: f93937da933af024eaecc46eecdd68a3, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: c3149ca72e1587348a1f577bd39795f3, type: 2}
 --- !u!4 &841161410
 Transform:
   m_ObjectHideFlags: 0
@@ -372,6 +373,63 @@ MonoBehaviour:
   bulletPrefabGameObject: {fileID: 2189337419761655739, guid: c4a4921b20ea13b419b17cd81a345fbe, type: 3}
   zombiePrefabGameObject: {fileID: 2598477461324239554, guid: 700dd7b1bef5a5449a260f51b5a63cf2, type: 3}
   shootLightPrefabGameObject: {fileID: 5760005143722615204, guid: 848f609ad3e62e942b58d91655cfff2c, type: 3}
+--- !u!1001 &1614752908
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287548925842623492, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2489472668270583078, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
+      propertyPath: m_Name
+      value: ScoutUnit
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b7d854f8c2620364f844d88e0869d8b5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -381,3 +439,4 @@ SceneRoots:
   - {fileID: 436843904}
   - {fileID: 1040203158}
   - {fileID: 960397233}
+  - {fileID: 1614752908}

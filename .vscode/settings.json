@@ -1,3 +1,11 @@
 {
-    "dotnet.preferCSharpExtension": true
+    "dotnet.preferCSharpExtension": true,
+    "files.exclude": {
+        "**/*.meta": true,
+        "Temp": true,
+        "Library": true,
+        "Logs": true,
+        "obj": true,
+        "UserSettings": true,
+    }
 }

@@ -58,11 +58,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5593724510191427445, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: idleAnimationType
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5593724510191427445, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: walkAnimationType
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5593724510191427445, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: meleeAttackAnimationType

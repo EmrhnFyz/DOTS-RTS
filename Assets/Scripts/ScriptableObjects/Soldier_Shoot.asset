@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0f08f5ffac9e8419d49049e8a7d364, type: 3}
   m_Name: Soldier_Shoot
   m_EditorClassIdentifier: 
-  AnimationType: 5
+  AnimationType: 4
   meshArray:
   - {fileID: 4300000, guid: 68684d803c9d92344b4e9df8a54e10f1, type: 2}
   frameTimerMax: 0.05

@@ -172,7 +172,12 @@ ModelImporter:
   - first:
       95: 9500000
     second: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: APC_01_Material
+    second: {fileID: 2100000, guid: 0ac639c82a41e6c489ef001925ee546a, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

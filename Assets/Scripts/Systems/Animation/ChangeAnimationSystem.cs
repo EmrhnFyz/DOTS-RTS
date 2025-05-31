@@ -31,12 +31,7 @@ public partial struct ChangeAnimationJob : IJobEntity
 
 	public void Execute(ref ActiveAnimation activeAnimation, ref MaterialMeshInfo materialMeshInfo)
 	{
-		if (activeAnimation.ActiveAnimationType == AnimationType.SoldierShoot)
-		{
-			return;
-		}
-
-		if (activeAnimation.ActiveAnimationType == AnimationType.ZombieAttack)
+		if (AnimationDataSO.IsAnimationUninterruptible(activeAnimation.ActiveAnimationType))
 		{
 			return;
 		}
@@ -48,7 +43,7 @@ public partial struct ChangeAnimationJob : IJobEntity
 			activeAnimation.ActiveAnimationType = activeAnimation.NextAnimationType;
 
 			ref var animationData = ref AnimationDataBlobArrayBlobAssetReference.Value[(int)activeAnimation.ActiveAnimationType];
-			materialMeshInfo.MeshID = animationData.BatchMeshIdBlobArray[0];
+			materialMeshInfo.Mesh = animationData.intMeshIdBlobArray[0];
 		}
 	}
 }
