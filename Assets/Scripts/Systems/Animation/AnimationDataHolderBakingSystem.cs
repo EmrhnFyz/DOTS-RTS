@@ -30,6 +30,12 @@ internal partial struct AnimationDataHolderBakingSystem : ISystem
 
 		foreach (var animationDataHolder in SystemAPI.Query<RefRW<AnimationDataHolder>>())
 		{
+			// Dispose the old blob asset reference if it exists
+			if (animationDataHolder.ValueRW.AnimationDataBlobArrayBlobAssetReference.IsCreated)
+			{
+				animationDataHolder.ValueRW.AnimationDataBlobArrayBlobAssetReference.Dispose();
+			}
+
 			BlobBuilder blobBuilder = new(Allocator.Temp);
 			ref var animationDataBlobArray = ref blobBuilder.ConstructRoot<BlobArray<AnimationData>>();
 			var animationDataBlobBuilderArray = blobBuilder.Allocate(ref animationDataBlobArray, Enum.GetValues(typeof(AnimationType)).Length);
