@@ -57,7 +57,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0ed9a8419c3ed6c4d812c63c5f587e5f, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -86,7 +86,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825237179927179248}
-  m_Mesh: {fileID: 4300000, guid: e274e405c96af1740a3f6351f10189f9, type: 2}
+  m_Mesh: {fileID: 0}
 --- !u!114 &4513341634934079783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,3 +591,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idleAnimationType: 1
   walkAnimationType: 2
+  shootAnimationType: 0
+  aimAnimationType: 0
+  meleeAttackAnimationType: 0

@@ -11,7 +11,7 @@ PrefabInstance:
     - target: {fileID: 3493037212475000198, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 85cd5279f313d294c8d4eb59ece3cb5b, type: 2}
+      objectReference: {fileID: 2100000, guid: 9fdb5531bdf185e448dd06dfa8192f8d, type: 2}
     - target: {fileID: 4686481920791064884, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: faction
       value: 1
@@ -70,16 +70,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6151115344386756265, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_Height
-      value: 3
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 6151115344386756265, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_Radius
-      value: 0.65
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6193176710345390012, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: 704f5ea696ef75944b30d5c8ec37f428, type: 2}
+      objectReference: {fileID: 4300000, guid: 086245efa0b4ab7419ea6e7b8467203b, type: 2}
     - target: {fileID: 6673234106719524852, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: range
       value: 15
@@ -91,6 +91,42 @@ PrefabInstance:
     - target: {fileID: 7046735670288218313, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: moveSpeed
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8370986056907583450, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8451252528002914600, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_Name
@@ -138,4 +174,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 0.75
   damageAmount: 10
-  colliderSize: 0.65
+  colliderSize: 1

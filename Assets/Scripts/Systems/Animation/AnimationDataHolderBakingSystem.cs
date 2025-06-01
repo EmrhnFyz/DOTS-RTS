@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Rendering;
-using UnityEngine;
 
 [WorldSystemFilter(WorldSystemFilterFlags.BakingSystem)]
 [UpdateInGroup(typeof(PostBakingSystemGroup))]
@@ -27,8 +26,6 @@ internal partial struct AnimationDataHolderBakingSystem : ISystem
 		foreach (var (animationDataHolderSubEntity, materialMeshInfo) in SystemAPI.Query<RefRO<AnimationDataHolderSubEntity>, RefRO<MaterialMeshInfo>>())
 		{
 			blobAssetDataDictionary[animationDataHolderSubEntity.ValueRO.AnimationType][animationDataHolderSubEntity.ValueRO.MeshIndex] = materialMeshInfo.ValueRO.Mesh;
-
-			Debug.Log(animationDataHolderSubEntity.ValueRO.AnimationType + " :: " + animationDataHolderSubEntity.ValueRO.MeshIndex + " = " + materialMeshInfo.ValueRO.Mesh);
 		}
 
 		foreach (var animationDataHolder in SystemAPI.Query<RefRW<AnimationDataHolder>>())
