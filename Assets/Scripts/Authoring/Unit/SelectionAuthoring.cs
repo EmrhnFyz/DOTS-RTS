@@ -1,16 +1,16 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class UnitSelectionAuthoring : MonoBehaviour
+public class SelectionAuthoring : MonoBehaviour
 {
 	[SerializeField]
 	private GameObject _selectionMark;
 
 	public float showScale;
 
-	private class SelectedAuthoringBaker : Baker<UnitSelectionAuthoring>
+	private class SelectedAuthoringBaker : Baker<SelectionAuthoring>
 	{
-		public override void Bake(UnitSelectionAuthoring authoring)
+		public override void Bake(SelectionAuthoring authoring)
 		{
 			var entity = GetEntity(TransformUsageFlags.Dynamic);
 			AddComponent(entity, new Selected

@@ -92,14 +92,17 @@ public class UnitSelectionManager : MonoBehaviour
 		                   {
 			                   Start = cameraRay.GetPoint(0.1f),
 			                   End = cameraRay.GetPoint(GameConfig.MAX_RAY_DISTANCE),
-			                   Filter = GameConfig.UnitSelectionCollisionFilter
+			                   Filter = GameConfig.FactionSelectionCollisionFilter
 		                   };
 		if (collisionWorld.CastRay(raycastInput, out var raycastHit))
 		{
-			_entityManager.SetComponentEnabled<Selected>(raycastHit.Entity, true);
-			var selected = _entityManager.GetComponentData<Selected>(raycastHit.Entity);
-			selected.OnSelected = true;
-			_entityManager.SetComponentData(raycastHit.Entity, selected);
+			if (_entityManager.HasComponent<Selected>(raycastHit.Entity))
+			{
+				_entityManager.SetComponentEnabled<Selected>(raycastHit.Entity, true);
+				var selected = _entityManager.GetComponentData<Selected>(raycastHit.Entity);
+				selected.OnSelected = true;
+				_entityManager.SetComponentData(raycastHit.Entity, selected);
+			}
 		}
 	}
 

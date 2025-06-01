@@ -40,4 +40,6 @@ public class GameConfig : MonoBehaviour
 	{
 		return !CachedCamera ? Vector3.zero : CachedCamera.transform.forward;
 	}
+
+	public UnitTypeListSO unitTypeListSO;
 }

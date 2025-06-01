@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -77,6 +79,7 @@ public class UnitMoverManager : MonoBehaviour
 
 		if (!isAttackingSingleTarget)
 		{
+			TrySetBarracksRallyPosition();
 			var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<MoveOverride>().Build(_entityManager);
 			var entityArray = entityQuery.ToEntityArray(Allocator.Temp);
 			var moveOverrideArray = entityQuery.ToComponentDataArray<MoveOverride>(Allocator.Temp);
@@ -147,5 +150,29 @@ public class UnitMoverManager : MonoBehaviour
 
 		entityQuery.CopyFromComponentDataArray(targetOverrideArray);
 		return true;
+	}
+
+	//Handle Barracks Rally Position
+	public void TrySetBarracksRallyPosition()
+	{
+		var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected, Barracks, LocalTransform>().Build(_entityManager);
+		var barracksArray = entityQuery.ToComponentDataArray<Barracks>(Allocator.Temp);
+
+		if (barracksArray.Length == 0)
+		{
+			return;
+		}
+
+		var localTransformArray = entityQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+		var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
+
+		for (var i = 0; i < barracksArray.Length; i++)
+		{
+			var barracks = barracksArray[i];
+			barracks.rallyPositionOffset = (float3)mouseWorldPosition - localTransformArray[i].Position;
+			barracksArray[i] = barracks;
+		}
+
+		entityQuery.CopyFromComponentDataArray(barracksArray);
 	}
 }

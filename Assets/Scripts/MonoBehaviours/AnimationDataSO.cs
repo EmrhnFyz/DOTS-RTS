@@ -16,7 +16,7 @@ public enum AnimationType
 	ScoutShoot
 }
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "AnimationDataSO", menuName = "ScriptableObjects/Animations/AnimationDataSO")]
 public class AnimationDataSO : ScriptableObject
 {
 	public AnimationType AnimationType;

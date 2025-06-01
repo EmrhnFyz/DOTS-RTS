@@ -95,6 +95,12 @@ internal partial struct ShootSystem : ISystem
 				continue;
 			}
 
+			var distanceToTarget = math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position);
+			if (distanceToTarget > findTarget.ValueRO.Range - GameConfig.TARGET_PROXIMITY_TRESHOLD)
+			{
+				continue;
+			}
+
 			shoot.ValueRW.Timer -= SystemAPI.Time.DeltaTime;
 
 			if (shoot.ValueRO.Timer > 0f)

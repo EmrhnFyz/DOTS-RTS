@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 5048994183875405820}
   - component: {fileID: 5616799616380274107}
   - component: {fileID: 4554415051292843910}
+  - component: {fileID: 1971668008977532746}
   m_Layer: 8
   m_Name: ZombieSpawnerBuilding
   m_TagString: Untagged
@@ -333,6 +334,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   factionType: 1
+--- !u!114 &1971668008977532746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209567711493897249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8d5d66a790ed814ca5c015db662c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingType: 1
 --- !u!1001 &4079879761974317353
 PrefabInstance:
   m_ObjectHideFlags: 0

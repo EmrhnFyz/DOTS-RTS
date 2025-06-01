@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "AnimationDataListSO", menuName = "ScriptableObjects/Animations/AnimationDataListSO")]
 public class AnimationDataListSO : ScriptableObject
 {
 	public List<AnimationDataSO> animationDataSOList;
