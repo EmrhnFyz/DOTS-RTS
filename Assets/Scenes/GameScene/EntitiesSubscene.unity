@@ -559,6 +559,7 @@ GameObject:
   - component: {fileID: 1928498256}
   - component: {fileID: 1928498255}
   - component: {fileID: 1928498257}
+  - component: {fileID: 1928498258}
   m_Layer: 8
   m_Name: Turret
   m_TagString: Untagged
@@ -575,7 +576,7 @@ Transform:
   m_GameObject: {fileID: 1928498246}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.28, y: 0, z: 13.39}
+  m_LocalPosition: {x: -12.54, y: 0, z: 13.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -883,6 +884,19 @@ MonoBehaviour:
   cooldown: 0.2
   damageAmount: 5
   nuzzle: {fileID: 1062559620}
+--- !u!114 &1928498258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928498246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265d6001ab585154c884841488805a83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turretHead: {fileID: 4789211383973606875}
 --- !u!1 &4789211383973606875
 GameObject:
   m_ObjectHideFlags: 0

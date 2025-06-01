@@ -5,6 +5,9 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+[UpdateInGroup(typeof(LateSimulationSystemGroup))]
+[UpdateBefore(typeof(ResetEventsSystem))]
+[UpdateAfter(typeof(BulletCollisionSystem))]
 internal partial struct HealthBarSystem : ISystem
 {
 	private ComponentLookup<LocalTransform> _localTransformLookup;
