@@ -61,11 +61,15 @@ internal partial struct ShootSystem : ISystem
 				var targetPosition = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity).Position;
 				bullet.ValueRW.Direction = math.normalize(targetPosition - localTransform.ValueRO.Position);
 
-				var enemyTargetOverride = SystemAPI.GetComponentRW<TargetOverride>(target.ValueRO.TargetEntity);
-
-				if (enemyTargetOverride.ValueRO.TargetEntity == Entity.Null)
+				// if target has a target override, set the bullet's target entity to the target's target entity
+				if (SystemAPI.HasComponent<TargetOverride>(target.ValueRO.TargetEntity))
 				{
-					enemyTargetOverride.ValueRW.TargetEntity = entity;
+					var enemyTargetOverride = SystemAPI.GetComponentRW<TargetOverride>(target.ValueRO.TargetEntity);
+
+					if (enemyTargetOverride.ValueRO.TargetEntity == Entity.Null)
+					{
+						enemyTargetOverride.ValueRW.TargetEntity = entity;
+					}
 				}
 			}
 			else

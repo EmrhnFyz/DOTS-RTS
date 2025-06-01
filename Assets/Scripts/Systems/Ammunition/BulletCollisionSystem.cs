@@ -68,7 +68,7 @@ internal partial struct BulletCollisionSystem : ISystem
 				HealthLookup[entityB] = health;
 				EntityCommandBuffer.DestroyEntity(entityA);
 			}
-			else
+			else if (BulletLookup.HasComponent(entityB))
 			{
 				if (!HealthLookup.HasComponent(entityA) || FriendlyLookup.HasComponent(entityA))
 				{

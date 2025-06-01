@@ -113,12 +113,7 @@ public class UnitMoverManager : MonoBehaviour
 		                   {
 			                   Start = cameraRay.GetPoint(0.1f),
 			                   End = cameraRay.GetPoint(GameConfig.MAX_RAY_DISTANCE),
-			                   Filter = new CollisionFilter
-			                            {
-				                            BelongsTo = ~0u,
-				                            CollidesWith = 1u << GameConfig.UNIT_LAYER,
-				                            GroupIndex = 0
-			                            }
+			                   Filter = GameConfig.FactionSelectionCollisionFilter
 		                   };
 
 		if (!collisionWorld.CastRay(raycastInput, out var raycastHit))
@@ -126,14 +121,14 @@ public class UnitMoverManager : MonoBehaviour
 			return false;
 		}
 
-		if (!_entityManager.HasComponent<Unit>(raycastHit.Entity))
+		if (!_entityManager.HasComponent<Faction>(raycastHit.Entity))
 		{
 			return false;
 		}
 
-		var clickedUnit = _entityManager.GetComponentData<Unit>(raycastHit.Entity);
+		var clickedUnit = _entityManager.GetComponentData<Faction>(raycastHit.Entity);
 
-		if (clickedUnit.Faction != Factions.Enemy)
+		if (clickedUnit.FactionType != Factions.Enemy)
 		{
 			return false;
 		}

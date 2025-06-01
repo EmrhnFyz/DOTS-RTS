@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 6661180092287521756}
   - component: {fileID: 2472890974093683030}
   - component: {fileID: 5593724510191427445}
+  - component: {fileID: 3331743431962469085}
   m_Layer: 6
   m_Name: BaseUnit
   m_TagString: Untagged
@@ -342,6 +343,19 @@ MonoBehaviour:
   shootAnimationType: 0
   aimAnimationType: 0
   meleeAttackAnimationType: 0
+--- !u!114 &3331743431962469085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8451252528002914600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb0244c25bee9224096f4db3ef63aa4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  factionType: 0
 --- !u!1001 &9207187612308832179
 PrefabInstance:
   m_ObjectHideFlags: 0

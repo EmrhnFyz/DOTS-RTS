@@ -92,12 +92,7 @@ public class UnitSelectionManager : MonoBehaviour
 		                   {
 			                   Start = cameraRay.GetPoint(0.1f),
 			                   End = cameraRay.GetPoint(GameConfig.MAX_RAY_DISTANCE),
-			                   Filter = new CollisionFilter
-			                            {
-				                            BelongsTo = ~0u,
-				                            CollidesWith = 1u << GameConfig.UNIT_LAYER,
-				                            GroupIndex = 0
-			                            }
+			                   Filter = GameConfig.UnitSelectionCollisionFilter
 		                   };
 		if (collisionWorld.CastRay(raycastInput, out var raycastHit))
 		{

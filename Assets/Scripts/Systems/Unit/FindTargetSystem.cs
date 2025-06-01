@@ -7,13 +7,13 @@ using Unity.Transforms;
 
 internal partial struct FindTargetSystem : ISystem
 {
-	private ComponentLookup<Unit> _unitLookup;
+	private ComponentLookup<Faction> _factionLookup;
 	private ComponentLookup<LocalTransform> _targetLocalTransformLookup;
 
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<PhysicsWorldSingleton>();
-		_unitLookup = SystemAPI.GetComponentLookup<Unit>(true);
+		_factionLookup = SystemAPI.GetComponentLookup<Faction>(true);
 		_targetLocalTransformLookup = SystemAPI.GetComponentLookup<LocalTransform>(true);
 	}
 
@@ -21,7 +21,7 @@ internal partial struct FindTargetSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-		_unitLookup.Update(ref state);
+		_factionLookup.Update(ref state);
 		_targetLocalTransformLookup.Update(ref state);
 
 		var deltaTime = SystemAPI.Time.DeltaTime;
@@ -29,7 +29,7 @@ internal partial struct FindTargetSystem : ISystem
 		var findTargetJob = new FindTargetJob
 		                    {
 			                    CollisionWorld = physicsWorldSingleton.CollisionWorld,
-			                    UnitLookup = _unitLookup,
+			                    FactionLookup = _factionLookup,
 			                    TargetLocalTransformLookup = _targetLocalTransformLookup,
 			                    DeltaTime = deltaTime
 		                    };
@@ -41,7 +41,7 @@ internal partial struct FindTargetSystem : ISystem
 internal partial struct FindTargetJob : IJobEntity
 {
 	[ReadOnly] public CollisionWorld CollisionWorld;
-	[ReadOnly] public ComponentLookup<Unit> UnitLookup;
+	[ReadOnly] public ComponentLookup<Faction> FactionLookup;
 	[ReadOnly] public ComponentLookup<LocalTransform> TargetLocalTransformLookup;
 	[ReadOnly] public float DeltaTime;
 
@@ -63,12 +63,7 @@ internal partial struct FindTargetJob : IJobEntity
 
 			var distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
 
-			var collisionFilter = new CollisionFilter
-			                      {
-				                      BelongsTo = ~0u,
-				                      CollidesWith = 1u << GameConfig.UNIT_LAYER,
-				                      GroupIndex = 0
-			                      };
+			var collisionFilter = GameConfig.FactionSelectionCollisionFilter;
 
 			var closestTarget = Entity.Null;
 			var closestDistanceSq = float.MaxValue;
@@ -88,10 +83,10 @@ internal partial struct FindTargetJob : IJobEntity
 				{
 					var distanceHit = distanceHitList[i];
 
-					if (UnitLookup.HasComponent(distanceHit.Entity))
+					if (FactionLookup.HasComponent(distanceHit.Entity))
 					{
-						var hitUnit = UnitLookup[distanceHit.Entity];
-						if (findTarget.TargetFaction == hitUnit.Faction)
+						var hitUnit = FactionLookup[distanceHit.Entity];
+						if (findTarget.TargetFaction == hitUnit.FactionType)
 						{
 							var distanceSq = distanceHit.Distance * distanceHit.Distance;
 							if (distanceSq + currentTargetDistanceOffset * currentTargetDistanceOffset < closestDistanceSq)
