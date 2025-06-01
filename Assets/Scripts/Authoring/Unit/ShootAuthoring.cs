@@ -6,7 +6,7 @@ public class ShootAuthoring : MonoBehaviour
 {
 	public float cooldown = 0.2f;
 	public float damageAmount;
-	public Transform nuzzleTransform;
+	public GameObject nuzzle;
 
 	public class Baker : Baker<ShootAuthoring>
 	{
@@ -17,7 +17,7 @@ public class ShootAuthoring : MonoBehaviour
 			                     {
 				                     Cooldown = authoring.cooldown,
 				                     DamageAmount = authoring.damageAmount,
-				                     NuzzleLocalPosition = authoring.nuzzleTransform.localPosition
+				                     NuzzleEntity = GetEntity(authoring.nuzzle, TransformUsageFlags.Dynamic)
 			                     });
 		}
 	}
@@ -29,7 +29,7 @@ public struct Shoot : IComponentData
 	public float Timer;
 	public float DamageAmount;
 
-	public float3 NuzzleLocalPosition;
+	public Entity NuzzleEntity;
 
 	public OnShootEvent OnShoot;
 

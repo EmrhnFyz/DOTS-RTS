@@ -28,7 +28,8 @@ internal partial struct MeleeAttackSystem : ISystem
 			}
 
 			var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity);
-			var isCloseEnoughToAttack = math.distancesq(localTransform.ValueRO.Position, targetLocalTransform.Position) < 10f;
+			var distanceToTarget = math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position);
+			var isCloseEnoughToAttack = distanceToTarget < meleeAttack.ValueRO.AttackDistance;
 			var isTouchingTarget = false;
 
 			if (!isCloseEnoughToAttack)

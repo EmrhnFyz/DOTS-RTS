@@ -16,8 +16,8 @@ internal partial struct ShootSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-		foreach (var (localTransform, shoot, target, findTarget, unitMover, entity)
-		         in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>().WithDisabled<MoveOverride>().WithEntityAccess())
+		foreach (var (localTransform, shoot, target, findTarget, unitMover)
+		         in SystemAPI.Query<RefRW<LocalTransform>, RefRO<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>().WithDisabled<MoveOverride>())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
@@ -25,8 +25,9 @@ internal partial struct ShootSystem : ISystem
 			}
 
 			var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity);
+			var distanceToTarget = math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position);
 
-			if (math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position) > findTarget.ValueRO.Range - GameConfig.TARGET_PROXIMITY_TRESHOLD)
+			if (distanceToTarget > findTarget.ValueRO.Range - GameConfig.TARGET_PROXIMITY_TRESHOLD)
 			{
 				unitMover.ValueRW.TargetPosition = targetLocalTransform.Position;
 				continue;
@@ -37,6 +38,62 @@ internal partial struct ShootSystem : ISystem
 
 			var targetRotation = quaternion.LookRotation(aimDirection, math.up());
 			localTransform.ValueRW.Rotation = math.slerp(localTransform.ValueRO.Rotation, targetRotation, SystemAPI.Time.DeltaTime * unitMover.ValueRO.RotationSpeed);
+		}
+
+		foreach (var (rotator, target) in SystemAPI.Query<RefRO<TurretRotator>, RefRO<Target>>())
+		{
+			if (target.ValueRO.TargetEntity == Entity.Null)
+			{
+				continue;
+			}
+
+			// Safety checks
+			if (!SystemAPI.HasComponent<LocalToWorld>(target.ValueRO.TargetEntity) ||
+			    !SystemAPI.HasComponent<LocalToWorld>(rotator.ValueRO.TurretHeadEntity) ||
+			    !SystemAPI.HasComponent<LocalTransform>(rotator.ValueRO.TurretHeadEntity))
+			{
+				continue;
+			}
+
+			// Get world positions
+			var targetWorld = SystemAPI.GetComponent<LocalToWorld>(target.ValueRO.TargetEntity);
+			var headWorld = SystemAPI.GetComponent<LocalToWorld>(rotator.ValueRO.TurretHeadEntity);
+			var headLocal = SystemAPI.GetComponentRW<LocalTransform>(rotator.ValueRO.TurretHeadEntity);
+
+			var toTarget = math.normalize(targetWorld.Position - headWorld.Position);
+
+			// Flatten to Y axis to prevent turret tilting up/down
+			toTarget.y = 0f;
+
+			if (math.lengthsq(toTarget) < 0.0001f)
+			{
+				continue;
+			}
+
+			var targetRotation = quaternion.LookRotationSafe(toTarget, math.up());
+
+			// Apply rotation smoothly
+			headLocal.ValueRW.Rotation = math.slerp(headLocal.ValueRO.Rotation, targetRotation, SystemAPI.Time.DeltaTime * 5f);
+		}
+
+		foreach (var (localTransform, shoot, target, findTarget, entity)
+		         in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Shoot>, RefRO<Target>, RefRO<FindTarget>>().WithEntityAccess())
+		{
+			if (target.ValueRO.TargetEntity == Entity.Null)
+			{
+				continue;
+			}
+
+			var targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.TargetEntity);
+			if (math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position) > findTarget.ValueRO.Range)
+			{
+				continue;
+			}
+
+			if (SystemAPI.HasComponent<MoveOverride>(entity) && SystemAPI.IsComponentEnabled<MoveOverride>(entity))
+			{
+				continue;
+			}
 
 			shoot.ValueRW.Timer -= SystemAPI.Time.DeltaTime;
 
@@ -49,8 +106,8 @@ internal partial struct ShootSystem : ISystem
 
 
 			var bulletEntity = state.EntityManager.Instantiate(entitiesReferences.BulletPrefabEntity);
-
-			var bulletSpawnWorldPosition = localTransform.ValueRO.TransformPoint(shoot.ValueRO.NuzzleLocalPosition);
+			var nuzzleWorldTransform = SystemAPI.GetComponent<LocalToWorld>(shoot.ValueRO.NuzzleEntity);
+			var bulletSpawnWorldPosition = nuzzleWorldTransform.Position;
 
 			SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(bulletSpawnWorldPosition));
 			var bullet = SystemAPI.GetComponentRW<Bullet>(bulletEntity);

@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateInGroup(typeof(LateSimulationSystemGroup))]
 internal partial struct BulletCollisionSystem : ISystem
 {
 	private ComponentLookup<Bullet> _bulletLookup;

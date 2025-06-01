@@ -283,7 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 0.3
   damageAmount: 2
-  nuzzleTransform: {fileID: 7029701560947915679}
+  nuzzle: {fileID: 5757704311418296502}
 --- !u!114 &4626826308338028288
 MonoBehaviour:
   m_ObjectHideFlags: 0

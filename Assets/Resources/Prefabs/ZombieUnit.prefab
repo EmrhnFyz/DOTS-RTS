@@ -179,3 +179,4 @@ MonoBehaviour:
   cooldown: 0.75
   damageAmount: 10
   colliderSize: 1
+  attackDistance: 2

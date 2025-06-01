@@ -348,8 +348,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1062559620}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7, z: 29.7}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.007999183, y: 0.68743014, z: 2.8230002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -406,6 +406,10 @@ PrefabInstance:
     - target: {fileID: 2489472668270583078, guid: b7ff7a043e93ee44eae3e2d60af85ae8, type: 3}
       propertyPath: m_Name
       value: SoldierUnit_NEW
+      objectReference: {fileID: 0}
+    - target: {fileID: 2489472668270583078, guid: b7ff7a043e93ee44eae3e2d60af85ae8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7475202974721540488, guid: b7ff7a043e93ee44eae3e2d60af85ae8, type: 3}
       propertyPath: m_Materials.Array.size
@@ -571,12 +575,14 @@ Transform:
   m_GameObject: {fileID: 1928498246}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.57, y: 0, z: 13.39}
+  m_LocalPosition: {x: 6.28, y: 0, z: 13.39}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4789211383974029817}
   - {fileID: 388368492}
+  - {fileID: 4789211383974029819}
+  - {fileID: 4789211383974029821}
+  - {fileID: 4789211383974029823}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1928498248
@@ -876,23 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 0.2
   damageAmount: 5
-  nuzzleTransform: {fileID: 1062559621}
---- !u!1 &4789211383973606873
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4789211383974029817}
-  m_Layer: 0
-  m_Name: _MG_turret_portable
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
+  nuzzle: {fileID: 1062559620}
 --- !u!1 &4789211383973606875
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,24 +937,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4789211383974029817
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4789211383973606873}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.69, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
-  m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 4789211383974029819}
-  - {fileID: 4789211383974029821}
-  - {fileID: 4789211383974029823}
-  m_Father: {fileID: 1928498247}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4789211383974029819
 Transform:
   m_ObjectHideFlags: 0
@@ -973,13 +945,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4789211383973606875}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.00000049274723, y: 7.4200683, z: -0.44090742}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.03700018, y: 2.3325698, z: -0.10200024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1062559621}
-  m_Father: {fileID: 4789211383974029817}
+  m_Father: {fileID: 1928498247}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4789211383974029821
 Transform:
@@ -989,12 +961,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4789211383973606877}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.69, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4789211383974029817}
+  m_Father: {fileID: 1928498247}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4789211383974029823
 Transform:
@@ -1004,12 +976,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4789211383973606879}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0007488457, y: 6.7864304, z: -0.47310683}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.037748337, y: 2.2, z: -0.13419914}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4789211383974029817}
+  m_Father: {fileID: 1928498247}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &4789211383975799577
 MeshRenderer:
@@ -1181,6 +1153,10 @@ PrefabInstance:
     - target: {fileID: 1209567711493897249, guid: bc6e3ae3f89ea6344b65bee17b4b6be3, type: 3}
       propertyPath: m_Name
       value: ZombieSpawnerBuilding
+      objectReference: {fileID: 0}
+    - target: {fileID: 1209567711493897249, guid: bc6e3ae3f89ea6344b65bee17b4b6be3, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1935689481780000454, guid: bc6e3ae3f89ea6344b65bee17b4b6be3, type: 3}
       propertyPath: m_LocalPosition.x
