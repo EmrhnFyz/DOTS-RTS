@@ -22,7 +22,6 @@ public class UnitMoverManager : MonoBehaviour
 
 	[SerializeField] private FormationTypeEventChannelSO _formationTypeEventChannel;
 
-
 	private void Awake()
 	{
 		_playerInputActions = new PlayerInputActions();
@@ -63,6 +62,7 @@ public class UnitMoverManager : MonoBehaviour
 		_formationTypeEventChannel.UnregisterListener(e => OnFormationTypeChanged(e.Value));
 	}
 
+
 	private void OnFormationTypeChanged(FormationType newFormationType)
 	{
 		if (_formations.TryGetValue(newFormationType, out _))
@@ -73,6 +73,11 @@ public class UnitMoverManager : MonoBehaviour
 
 	private void MoveToSelectedPosition(InputAction.CallbackContext context)
 	{
+		if (GameConfig.IsBuildingPlacementActive)
+		{
+			return;
+		}
+
 		var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
 
 		var isAttackingSingleTarget = OnEnemySelected();

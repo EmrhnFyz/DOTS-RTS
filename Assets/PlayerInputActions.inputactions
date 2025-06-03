@@ -31,6 +31,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BuildingPlacement",
+                    "type": "Button",
+                    "id": "aaf21c8e-dac4-4252-8f31-941bc47ff6a4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CancelBuildingPlacement",
+                    "type": "Button",
+                    "id": "d7d58002-3675-4060-94d7-9754a5c7f51e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -64,6 +82,28 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "SelectionEnd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "30666104-ebc3-4310-8ef1-cf0f4903a1e7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BuildingPlacement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2cf1c632-4297-41dd-8cea-82e6e89cb72f",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CancelBuildingPlacement",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

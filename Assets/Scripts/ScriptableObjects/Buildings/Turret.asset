@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: Turret
   m_EditorClassIdentifier: 
   buildingType: 2
+  buildingCollider: {fileID: 1884475337877019814, guid: db6a101469fde9242ae3d35156a93717, type: 3}
+  isPlaceable: 1
+  iconSprite: {fileID: 21300000, guid: 77f584958901eb64b8f9d4b9dc488ae3, type: 3}
+  visualPrefab: {fileID: 5873452033065476159, guid: 44ef29094a986954ab87829217222b22, type: 3}

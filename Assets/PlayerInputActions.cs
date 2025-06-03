@@ -117,6 +117,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BuildingPlacement"",
+                    ""type"": ""Button"",
+                    ""id"": ""aaf21c8e-dac4-4252-8f31-941bc47ff6a4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CancelBuildingPlacement"",
+                    ""type"": ""Button"",
+                    ""id"": ""d7d58002-3675-4060-94d7-9754a5c7f51e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -150,6 +168,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""SelectionEnd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30666104-ebc3-4310-8ef1-cf0f4903a1e7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BuildingPlacement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2cf1c632-4297-41dd-8cea-82e6e89cb72f"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CancelBuildingPlacement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -740,6 +780,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_SelectStart = m_Player.FindAction("SelectStart", throwIfNotFound: true);
         m_Player_SelectionEnd = m_Player.FindAction("SelectionEnd", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_BuildingPlacement = m_Player.FindAction("BuildingPlacement", throwIfNotFound: true);
+        m_Player_CancelBuildingPlacement = m_Player.FindAction("CancelBuildingPlacement", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -836,6 +878,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SelectStart;
     private readonly InputAction m_Player_SelectionEnd;
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_BuildingPlacement;
+    private readonly InputAction m_Player_CancelBuildingPlacement;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -859,6 +903,14 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/BuildingPlacement".
+        /// </summary>
+        public InputAction @BuildingPlacement => m_Wrapper.m_Player_BuildingPlacement;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CancelBuildingPlacement".
+        /// </summary>
+        public InputAction @CancelBuildingPlacement => m_Wrapper.m_Player_CancelBuildingPlacement;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -894,6 +946,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @BuildingPlacement.started += instance.OnBuildingPlacement;
+            @BuildingPlacement.performed += instance.OnBuildingPlacement;
+            @BuildingPlacement.canceled += instance.OnBuildingPlacement;
+            @CancelBuildingPlacement.started += instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.performed += instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.canceled += instance.OnCancelBuildingPlacement;
         }
 
         /// <summary>
@@ -914,6 +972,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @BuildingPlacement.started -= instance.OnBuildingPlacement;
+            @BuildingPlacement.performed -= instance.OnBuildingPlacement;
+            @BuildingPlacement.canceled -= instance.OnBuildingPlacement;
+            @CancelBuildingPlacement.started -= instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.performed -= instance.OnCancelBuildingPlacement;
+            @CancelBuildingPlacement.canceled -= instance.OnCancelBuildingPlacement;
         }
 
         /// <summary>
@@ -1235,6 +1299,20 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BuildingPlacement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBuildingPlacement(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CancelBuildingPlacement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCancelBuildingPlacement(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

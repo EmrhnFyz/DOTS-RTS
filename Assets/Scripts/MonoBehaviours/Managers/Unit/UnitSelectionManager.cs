@@ -26,6 +26,7 @@ public class UnitSelectionManager : MonoBehaviour
 
 	private readonly float _minSelectionBoxSize = 80;
 
+
 	private void Awake()
 	{
 		_playerInputActions = new PlayerInputActions();
@@ -59,6 +60,12 @@ public class UnitSelectionManager : MonoBehaviour
 
 	private void OnLeftMouseButtonPressed(InputAction.CallbackContext context)
 	{
+		if (GameConfig.IsBuildingPlacementActive)
+		{
+			return;
+		}
+
+
 		_selectionStartPosition = Mouse.current.position.ReadValue();
 		_onSelectionBoxStarted.Raise(new ValueEvent<Vector2>(_selectionStartPosition));
 	}
@@ -66,6 +73,11 @@ public class UnitSelectionManager : MonoBehaviour
 
 	private void OnLeftMouseButtonReleased(InputAction.CallbackContext context)
 	{
+		if (GameConfig.IsBuildingPlacementActive)
+		{
+			return;
+		}
+
 		HandleReleaseAsync().Forget(); // Fire-and-forget
 	}
 

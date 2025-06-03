@@ -1,3 +1,4 @@
+using Unity.Entities;
 using UnityEngine;
 
 public enum BuildingType
@@ -13,4 +14,24 @@ public enum BuildingType
 public class BuildingTypeSO : ScriptableObject
 {
 	public BuildingType buildingType;
+	public BoxCollider buildingCollider;
+
+	public bool isPlaceable = true;
+
+	public Sprite iconSprite;
+
+	public Transform visualPrefab;
+
+	public Entity GetBuildingPrefabEntity(EntitiesReferences references)
+	{
+		switch (buildingType)
+		{
+			default:
+			case BuildingType.None:
+			case BuildingType.Barracks:
+				return references.BarracksPrefabEntity;
+			case BuildingType.Turret:
+				return references.TurretPrefabEntity;
+		}
+	}
 }
