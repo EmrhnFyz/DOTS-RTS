@@ -5,7 +5,6 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-[UpdateBefore(typeof(HealthBarSystem))]
 internal partial struct MeleeAttackSystem : ISystem
 {
 	public void OnCreate(ref SystemState state)

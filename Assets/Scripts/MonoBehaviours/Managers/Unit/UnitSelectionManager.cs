@@ -1,8 +1,10 @@
+using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEventKit;
 
@@ -10,6 +12,7 @@ public class UnitSelectionManager : MonoBehaviour
 {
 	[SerializeField] private Vector2EventChannelSO _onSelectionBoxStarted;
 	[SerializeField] private Vector2EventChannelSO _onSelectionBoxEnded;
+	[SerializeField] private BoolEventChannelSO _onBarracksSelected;
 
 	private PlayerInputActions _playerInputActions;
 
@@ -60,18 +63,29 @@ public class UnitSelectionManager : MonoBehaviour
 		_onSelectionBoxStarted.Raise(new ValueEvent<Vector2>(_selectionStartPosition));
 	}
 
+
 	private void OnLeftMouseButtonReleased(InputAction.CallbackContext context)
 	{
+		HandleReleaseAsync().Forget(); // Fire-and-forget
+	}
+
+	private async UniTaskVoid HandleReleaseAsync()
+	{
+		await UniTask.NextFrame(); // Wait one frame to let UI update its state
 		_selectionEndPosition = Mouse.current.position.ReadValue();
 		_onSelectionBoxEnded.Raise(new ValueEvent<Vector2>(_selectionEndPosition));
 		var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().Build(_entityManager);
-
 		DeselectAllEntities(entityQuery);
+
 		var selectionAreaRect = GetSelectionBoxRect();
 		var selectionAreaSize = selectionAreaRect.width + selectionAreaRect.height;
+
 		if (selectionAreaSize > _minSelectionBoxSize)
 		{
-			entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, Unit>().WithPresent<Selected>().Build(_entityManager);
+			entityQuery = new EntityQueryBuilder(Allocator.Temp)
+			              .WithAll<LocalTransform, Unit>()
+			              .WithPresent<Selected>()
+			              .Build(_entityManager);
 
 			SelectEntitiesInRectBox(entityQuery, selectionAreaRect);
 		}
@@ -102,6 +116,11 @@ public class UnitSelectionManager : MonoBehaviour
 				var selected = _entityManager.GetComponentData<Selected>(raycastHit.Entity);
 				selected.OnSelected = true;
 				_entityManager.SetComponentData(raycastHit.Entity, selected);
+
+				if (_entityManager.HasComponent<Barracks>(raycastHit.Entity))
+				{
+					_onBarracksSelected.Raise(new ValueEvent<bool>(true));
+				}
 			}
 		}
 	}
@@ -129,6 +148,14 @@ public class UnitSelectionManager : MonoBehaviour
 	{
 		var entityArray = entityQuery.ToEntityArray(Allocator.Temp);
 		var selectedArray = entityQuery.ToComponentDataArray<Selected>(Allocator.Temp);
+		if (entityArray.Length > 0 && _entityManager.HasComponent<Barracks>(entityArray[0]))
+		{
+			if (EventSystem.current && EventSystem.current.IsPointerOverGameObject())
+			{
+				return;
+			}
+		}
+
 		for (var i = 0; i < entityArray.Length; i++)
 		{
 			_entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
@@ -136,6 +163,8 @@ public class UnitSelectionManager : MonoBehaviour
 			selected.OnDeselected = true;
 			_entityManager.SetComponentData(entityArray[i], selected);
 		}
+
+		_onBarracksSelected.Raise(new ValueEvent<bool>(false));
 	}
 
 	public static Rect GetSelectionBoxRect()

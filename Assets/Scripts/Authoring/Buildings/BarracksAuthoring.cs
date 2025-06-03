@@ -17,28 +17,7 @@ public class BarracksAuthoring : MonoBehaviour
 				                     rallyPositionOffset = new float3(10, 0, 0) // Default offset for rally point
 			                     });
 
-			var spawnUnitTypeDynamicBuffer = AddBuffer<SpawnUnitTypeBuffer>(entity);
-
-			spawnUnitTypeDynamicBuffer.Add(new SpawnUnitTypeBuffer
-			                               {
-				                               UnitType = UnitType.Soldier
-			                               });
-			spawnUnitTypeDynamicBuffer.Add(new SpawnUnitTypeBuffer
-			                               {
-				                               UnitType = UnitType.Soldier
-			                               });
-			spawnUnitTypeDynamicBuffer.Add(new SpawnUnitTypeBuffer
-			                               {
-				                               UnitType = UnitType.Scout
-			                               });
-			spawnUnitTypeDynamicBuffer.Add(new SpawnUnitTypeBuffer
-			                               {
-				                               UnitType = UnitType.Soldier
-			                               });
-			spawnUnitTypeDynamicBuffer.Add(new SpawnUnitTypeBuffer
-			                               {
-				                               UnitType = UnitType.Scout
-			                               });
+			AddBuffer<SpawnUnitTypeBuffer>(entity);
 		}
 	}
 }
