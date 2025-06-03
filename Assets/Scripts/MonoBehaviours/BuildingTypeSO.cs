@@ -6,7 +6,8 @@ public enum BuildingType
 	None,
 	ZombieSpawner,
 	Turret,
-	Barracks
+	Barracks,
+	HQ
 }
 
 

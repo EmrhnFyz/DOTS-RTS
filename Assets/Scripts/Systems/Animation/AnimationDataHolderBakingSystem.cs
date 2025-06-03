@@ -63,4 +63,12 @@ internal partial struct AnimationDataHolderBakingSystem : ISystem
 			blobBuilder.Dispose();
 		}
 	}
+
+	public void OnDestroy(ref SystemState state)
+	{
+		foreach (var animationDataHolder in SystemAPI.Query<RefRW<AnimationDataHolder>>())
+		{
+			animationDataHolder.ValueRW.AnimationDataBlobArrayBlobAssetReference.Dispose();
+		}
+	}
 }

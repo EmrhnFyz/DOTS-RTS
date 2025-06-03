@@ -43,6 +43,7 @@ public partial struct ResetHealthEventsJob : IJobEntity
 	public void Execute(ref Health health)
 	{
 		health.OnHealthChanged = false;
+		health.OnDeath = false;
 	}
 }
 

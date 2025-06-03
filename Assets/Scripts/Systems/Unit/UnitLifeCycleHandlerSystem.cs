@@ -13,10 +13,11 @@ internal partial struct UnitLifeCycleHandlerSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-		foreach (var (health, entity) in SystemAPI.Query<RefRO<Health>>().WithEntityAccess())
+		foreach (var (health, entity) in SystemAPI.Query<RefRW<Health>>().WithEntityAccess())
 		{
 			if (health.ValueRO.CurrentHealth <= 0)
 			{
+				health.ValueRW.OnDeath = true;
 				entityCommandBuffer.DestroyEntity(entity);
 			}
 		}

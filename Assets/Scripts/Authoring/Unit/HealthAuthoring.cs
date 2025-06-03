@@ -20,11 +20,13 @@ public struct Health : IComponentData
 	public float MaxHealth;
 	public float CurrentHealth;
 	public bool OnHealthChanged;
+	public bool OnDeath;
 
 	public Health(float maxHealth)
 	{
 		MaxHealth = maxHealth;
 		CurrentHealth = maxHealth;
 		OnHealthChanged = true;
+		OnDeath = false;
 	}
 }
