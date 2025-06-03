@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -35,6 +36,17 @@ public class SkinnedMeshCombiner : MonoBehaviour
 		newSMR.sharedMesh = combinedMesh;
 		newSMR.bones = bones;
 		newSMR.rootBone = skinnedRenderers[0].rootBone;
+
+		var folderPath = "Assets/MergedMeshes";
+		if (!Directory.Exists(folderPath))
+		{
+			Directory.CreateDirectory(folderPath);
+		}
+
+		var assetPath = $"{folderPath}/{combinedMesh.name}.asset";
+		AssetDatabase.CreateAsset(combinedMesh, assetPath);
+		AssetDatabase.SaveAssets();
+
 
 		Debug.Log("Merged SkinnedMeshRenderers into one.");
 	}

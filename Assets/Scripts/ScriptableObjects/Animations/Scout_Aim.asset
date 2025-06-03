@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AnimationType: 10
   meshArray:
-  - {fileID: 4300000, guid: 8eea152ffde69634f9304062310c371a, type: 2}
+  - {fileID: 4300000, guid: c01f9b75ef917c24f96d96efa923a702, type: 2}
   frameTimerMax: 0.5
