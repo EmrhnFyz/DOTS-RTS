@@ -15,6 +15,12 @@ public struct ImageQueueItem
 	public Sprite Image;
 }
 
+public struct BarracksData
+{
+	public Entity BarracksEntity;
+	public Queue<Image> ActiveQueue;
+}
+
 public class BarracksUI : MonoBehaviour
 {
 	[SerializeField] private BoolEventChannelSO onBarracksSelected;
@@ -22,6 +28,7 @@ public class BarracksUI : MonoBehaviour
 	[SerializeField] private List<ImageQueueItem> _unitQueueItemList = new();
 
 	[SerializeField] private RectTransform unitQueueContainer;
+	[SerializeField] private GameObject barracksUIContainer;
 
 	[SerializeField] private Button soldierButton;
 	[SerializeField] private Button scoutButton;
@@ -37,12 +44,15 @@ public class BarracksUI : MonoBehaviour
 	private EntityManager _entityManager;
 	private EntityQuery _entityQuery;
 
-	private Entity _barracksEntity;
+	private readonly Dictionary<int, BarracksData> _barracksEntityDictionary = new();
+
+	private int _currentSelectedBarracksKey = -1;
 
 	private readonly Queue<Image> _unitQueueImages = new();
 
-	private readonly Queue<Image> _activeUnitQueue = new(30);
 	private readonly Dictionary<UnitType, Sprite> _unitImageDictionary = new();
+
+	private BarracksData GetCurrentSelectedBarrackData() => _barracksEntityDictionary[_currentSelectedBarracksKey];
 
 	private void Awake()
 	{
@@ -80,6 +90,8 @@ public class BarracksUI : MonoBehaviour
 	private void OnDestroy()
 	{
 		onBarracksSelected.UnregisterListener(e => OnBarracksSelected(e.Value));
+		ReturnAllActiveQueueImagesToPool();
+		_barracksEntityDictionary.Clear();
 	}
 
 	private void Start()
@@ -111,14 +123,53 @@ public class BarracksUI : MonoBehaviour
 
 	private void Show()
 	{
-		gameObject.SetActive(true);
+		PopulateActiveQueueOnBarracksSelection();
+		barracksUIContainer.SetActive(true);
 		progressBar.fillAmount = 0f;
 		progressText.text = "Ready!";
 	}
 
 	private void Hide()
 	{
-		gameObject.SetActive(false);
+		barracksUIContainer.SetActive(false);
+		ReturnAllActiveQueueImagesToPool();
+		_currentSelectedBarracksKey = -1;
+	}
+
+	private void ReturnAllActiveQueueImagesToPool()
+	{
+		if (_currentSelectedBarracksKey == -1 || !_barracksEntityDictionary.TryGetValue(_currentSelectedBarracksKey, out var barracksData))
+		{
+			return;
+		}
+
+		var activeQueue = barracksData.ActiveQueue;
+
+		while (activeQueue.Count > 0)
+		{
+			var image = activeQueue.Dequeue();
+			image.gameObject.SetActive(false);
+			_unitQueueImages.Enqueue(image);
+		}
+	}
+
+	private void PopulateActiveQueueOnBarracksSelection()
+	{
+		if (TrySetSelectedBarracks())
+		{
+			return;
+		}
+
+		var barracksData = GetCurrentSelectedBarrackData();
+		var spawnUnitTypeDynamicBuffer = _entityManager.GetBuffer<SpawnUnitTypeBuffer>(barracksData.BarracksEntity, true);
+
+		foreach (var spawnUnitType in spawnUnitTypeDynamicBuffer)
+		{
+			if (_unitImageDictionary.TryGetValue(spawnUnitType.UnitType, out var image))
+			{
+				PlaceUnitQueueImage(spawnUnitType.UnitType);
+			}
+		}
 	}
 
 	private void AddUnitToSpawnQueue(UnitType unitType)
@@ -128,7 +179,7 @@ public class BarracksUI : MonoBehaviour
 			return;
 		}
 
-		var spawnUnitTypeDynamicBuffer = _entityManager.GetBuffer<SpawnUnitTypeBuffer>(_barracksEntity);
+		var spawnUnitTypeDynamicBuffer = _entityManager.GetBuffer<SpawnUnitTypeBuffer>(GetCurrentSelectedBarrackData().BarracksEntity);
 
 		PlaceUnitQueueImage(unitType);
 		spawnUnitTypeDynamicBuffer.Add(new SpawnUnitTypeBuffer
@@ -137,26 +188,37 @@ public class BarracksUI : MonoBehaviour
 		                               });
 	}
 
+
 	private bool TrySetSelectedBarracks()
 	{
-		if (_barracksEntity == Entity.Null)
+		_entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+		_entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected, Barracks>().Build(_entityManager);
+		if (_entityQuery.IsEmpty)
 		{
-			_entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected, Barracks>().Build(_entityManager);
-			if (_entityQuery.IsEmpty)
+			return true;
+		}
+
+		using (var barracksArray = _entityQuery.ToEntityArray(Allocator.Temp))
+		{
+			if (barracksArray.Length > 0)
+			{
+				if (!_barracksEntityDictionary.ContainsKey(barracksArray[0].Index))
+				{
+					var barracksData = new BarracksData
+					                   {
+						                   BarracksEntity = barracksArray[0],
+						                   ActiveQueue = new Queue<Image>(30)
+					                   };
+
+					_barracksEntityDictionary.Add(barracksArray[0].Index, barracksData);
+				}
+
+				_currentSelectedBarracksKey = barracksArray[0].Index;
+			}
+			else
 			{
 				return true;
-			}
-
-			using (var barracksArray = _entityQuery.ToEntityArray(Allocator.Temp))
-			{
-				if (barracksArray.Length > 0)
-				{
-					_barracksEntity = barracksArray[0];
-				}
-				else
-				{
-					return true;
-				}
 			}
 		}
 
@@ -165,7 +227,7 @@ public class BarracksUI : MonoBehaviour
 
 	private void PlaceUnitQueueImage(UnitType unitType)
 	{
-		// if  queue is empty, add new image to the queue and use it
+		// if queue is empty, add new image to the queue and use it
 		if (_unitQueueImages.Count == 0)
 		{
 			var newImage = Instantiate(unitQueueImageTemplate, unitQueueContainer);
@@ -177,14 +239,14 @@ public class BarracksUI : MonoBehaviour
 		image.gameObject.SetActive(true);
 		image.sprite = _unitImageDictionary[unitType];
 
-		_activeUnitQueue.Enqueue(image);
+		_barracksEntityDictionary[_currentSelectedBarracksKey].ActiveQueue.Enqueue(image);
 	}
 
 	private void RemoveUnitFromQueueVisual()
 	{
-		if (_activeUnitQueue.Count > 0)
+		if (_barracksEntityDictionary[_currentSelectedBarracksKey].ActiveQueue.Count > 0)
 		{
-			var image = _activeUnitQueue.Dequeue();
+			var image = _barracksEntityDictionary[_currentSelectedBarracksKey].ActiveQueue.Dequeue();
 			image.gameObject.SetActive(false);
 			_unitQueueImages.Enqueue(image);
 		}
@@ -192,7 +254,7 @@ public class BarracksUI : MonoBehaviour
 
 	private void Update()
 	{
-		if (_activeUnitQueue.Count == 0)
+		if (_currentSelectedBarracksKey == -1 || !_barracksEntityDictionary.ContainsKey(_currentSelectedBarracksKey) || _barracksEntityDictionary[_currentSelectedBarracksKey].ActiveQueue.Count == 0)
 		{
 			return;
 		}
@@ -204,14 +266,9 @@ public class BarracksUI : MonoBehaviour
 
 	private void HandleSpawnQueueVisual()
 	{
-		if (TrySetSelectedBarracks())
-		{
-			return;
-		}
+		var spawnUnitTypeDynamicBuffer = _entityManager.GetBuffer<SpawnUnitTypeBuffer>(_barracksEntityDictionary[_currentSelectedBarracksKey].BarracksEntity, true);
 
-		var spawnUnitTypeDynamicBuffer = _entityManager.GetBuffer<SpawnUnitTypeBuffer>(_barracksEntity, true);
-
-		if (spawnUnitTypeDynamicBuffer.Length < _activeUnitQueue.Count)
+		if (spawnUnitTypeDynamicBuffer.Length < _barracksEntityDictionary[_currentSelectedBarracksKey].ActiveQueue.Count)
 		{
 			// if there are more units in the queue than images, remove the last image
 			RemoveUnitFromQueueVisual();
@@ -220,14 +277,14 @@ public class BarracksUI : MonoBehaviour
 
 	private void UpdateProgressBar()
 	{
-		if (!gameObject.activeSelf || _barracksEntity == Entity.Null)
+		if (!barracksUIContainer.activeSelf || _barracksEntityDictionary[_currentSelectedBarracksKey].BarracksEntity == Entity.Null)
 		{
 			progressBar.fillAmount = 0f;
 			progressText.text = "Ready!";
 			return;
 		}
 
-		var barracksData = _entityManager.GetComponentData<Barracks>(_barracksEntity);
+		var barracksData = _entityManager.GetComponentData<Barracks>(_barracksEntityDictionary[_currentSelectedBarracksKey].BarracksEntity);
 
 		if (barracksData.UnitTypeToSpawn == UnitType.None)
 		{
