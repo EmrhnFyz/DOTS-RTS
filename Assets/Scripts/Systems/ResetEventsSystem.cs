@@ -11,12 +11,22 @@ internal partial struct ResetEventsSystem : ISystem
 	[BurstCompile]
 	public void OnCreate(ref SystemState state)
 	{
+		state.RequireForUpdate<HQ>();
 		_jobHandleNativeArray = new NativeArray<JobHandle>(4, Allocator.Persistent);
 	}
 
-	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
+		if (SystemAPI.HasSingleton<HQ>())
+		{
+			var hqHealth = SystemAPI.GetComponent<Health>(SystemAPI.GetSingletonEntity<HQ>());
+
+			if (hqHealth.OnDeath)
+			{
+				DOTSEventManager.Instance.TriggerOnHQDeath();
+			}
+		}
+
 		_jobHandleNativeArray[0] = new ResetSelectedEventsJob().ScheduleParallel(state.Dependency);
 		_jobHandleNativeArray[1] = new ResetHealthEventsJob().ScheduleParallel(state.Dependency);
 		_jobHandleNativeArray[2] = new ResetShootEventsJob().ScheduleParallel(state.Dependency);
