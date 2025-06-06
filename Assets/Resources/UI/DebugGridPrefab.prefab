@@ -132,4 +132,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2105ec68d15782e46aa70a7f22322a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridImagePrefab: {fileID: 9058951329355795695}
+  spriteRenderer: {fileID: 9058951329355795695}

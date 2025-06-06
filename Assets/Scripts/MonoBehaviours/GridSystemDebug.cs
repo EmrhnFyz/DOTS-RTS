@@ -1,10 +1,15 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class GridSystemDebug : MonoBehaviour
 {
 	public static GridSystemDebug Instance { get; private set; }
 	[SerializeField] private Transform debugGridPrefab;
+
+	[SerializeField] private Sprite arrowSprite;
+	[SerializeField] private Sprite circleSprite;
+
 	private bool _isInitialized;
 
 	private DebugGrid[,] _debugGridMatrix;
@@ -44,10 +49,29 @@ public class GridSystemDebug : MonoBehaviour
 				var debugGrid = _debugGridMatrix[x, y];
 				var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 				var index = GridSystem.CalculateIndex(x, y, data.Width);
-				var gridNodeEntity = data.GridMap.GridEntityArray[index];
+				var gridIndex = math.clamp(data.NextAvailableMapIndex - 1, 0, GridSystem.FLOW_FIELD_MAP_COUNT);
+				var gridNodeEntity = data.GridMapArray[gridIndex].GridEntityArray[index];
 				var gridNode = entityManager.GetComponentData<GridSystem.GridNode>(gridNodeEntity);
 
-				debugGrid.SetColor(gridNode.Data == 0 ? Color.white : Color.blue);
+				if (gridNode.Cost == 0)
+				{
+					debugGrid.SetSprite(circleSprite);
+					debugGrid.SetColor(Color.green);
+				}
+				else
+				{
+					if (gridNode.Cost == GridSystem.WALL_COST)
+					{
+						debugGrid.SetSprite(circleSprite);
+						debugGrid.SetColor(Color.black);
+					}
+					else
+					{
+						debugGrid.SetSprite(arrowSprite);
+						debugGrid.SetSpriteRotation(Quaternion.LookRotation(new float3(gridNode.Vector.x, 0, gridNode.Vector.y), Vector3.up));
+						debugGrid.SetColor(Color.white);
+					}
+				}
 			}
 		}
 	}
