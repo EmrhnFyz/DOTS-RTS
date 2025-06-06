@@ -24,6 +24,10 @@ public partial struct GridSystem : ISystem
 	public struct GridMap
 	{
 		public NativeArray<Entity> GridEntityArray;
+
+		public int2 TargetGridPosition;
+
+		public bool IsValid;
 	}
 
 	public struct GridNode : IComponentData
@@ -103,8 +107,11 @@ public partial struct GridSystem : ISystem
 		var gridMapArray = new NativeArray<GridMap>(FLOW_FIELD_MAP_COUNT, Allocator.Persistent);
 		for (var i = 0; i < FLOW_FIELD_MAP_COUNT; i++)
 		{
-			var gridMap = new GridMap();
-			gridMap.GridEntityArray = new NativeArray<Entity>(totalCells, Allocator.Persistent);
+			var gridMap = new GridMap
+			              {
+				              IsValid = false,
+				              GridEntityArray = new NativeArray<Entity>(totalCells, Allocator.Persistent)
+			              };
 
 			state.EntityManager.Instantiate(gridNodeEntityPrefab, gridMap.GridEntityArray);
 
@@ -151,7 +158,26 @@ public partial struct GridSystem : ISystem
 			var targetGridPosition = GetGridPosition(fieldPathRequest.ValueRO.TargetPosition, gridSystemData.CellSize);
 
 			flowFieldPathRequestEnabled.ValueRW = false;
+			bool alreadyCalculatedPath = false;
+			
+			for(int i = 0; i < FLOW_FIELD_MAP_COUNT; i++)
+			{
+				if (gridSystemData.GridMapArray[i].IsValid && gridSystemData.GridMapArray[i].TargetGridPosition.Equals(targetGridPosition))
+				{
+					// Reuse existing map
+					flowFieldFollower.ValueRW.GridIndex = i;
+					flowFieldFollower.ValueRW.TargetPosition = fieldPathRequest.ValueRO.TargetPosition;
+					flowFieldFollowerEnabled.ValueRW = true;
+					alreadyCalculatedPath = true;
+					break;
+				}
+			}
 
+			if (alreadyCalculatedPath)
+			{
+				continue;
+			}
+			
 			var gridIndex = gridSystemData.NextAvailableMapIndex;
 			gridSystemData.NextAvailableMapIndex = (gridSystemData.NextAvailableMapIndex + 1) % FLOW_FIELD_MAP_COUNT;
 			SystemAPI.SetComponent(state.SystemHandle, gridSystemData);
@@ -200,12 +226,7 @@ public partial struct GridSystem : ISystem
 					if (collisionWorld.OverlapSphere(GetWorldCenterPosition(x, y, gridSystemData.CellSize),
 					                                 gridSystemData.CellSize * 0.5f,
 					                                 ref distanceHitList,
-					                                 new CollisionFilter
-					                                 {
-						                                 BelongsTo = ~0u,
-						                                 CollidesWith = 1u << GameConfig.PATHFINDING_WALLS,
-						                                 GroupIndex = 0
-					                                 }))
+					                                 GameConfig.PathfindingWallCollisionFilter))
 					{
 						var index = CalculateIndex(x, y, gridSystemData.Width);
 						gridNodeNativeArray[index].ValueRW.Cost = WALL_COST;
@@ -250,6 +271,12 @@ public partial struct GridSystem : ISystem
 
 			gridNodeOpenQueue.Dispose();
 			gridNodeNativeArray.Dispose();
+			
+			var gridMap = gridSystemData.GridMapArray[gridIndex];
+			gridMap.TargetGridPosition = targetGridPosition;
+			gridMap.IsValid = true;
+			gridSystemData.GridMapArray[gridIndex] = gridMap;
+			SystemAPI.SetComponent(state.SystemHandle, gridSystemData);
 		}
 
 #if GRID_DEBUG

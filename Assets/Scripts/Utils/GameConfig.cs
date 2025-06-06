@@ -32,6 +32,13 @@ public class GameConfig : MonoBehaviour
 		                                                                         GroupIndex = 0
 	                                                                         };
 
+	public static readonly CollisionFilter PathfindingWallCollisionFilter = new()
+	                                                                        {
+		                                                                        BelongsTo = ~0u,
+		                                                                        CollidesWith = 1u << PATHFINDING_WALLS,
+		                                                                        GroupIndex = 0
+	                                                                        };
+
 	[SerializeField] private BuildingTypeSOEventChannelSO onActiveBuildingTypeChangedEventChannel;
 
 	public static bool IsBuildingPlacementActive;

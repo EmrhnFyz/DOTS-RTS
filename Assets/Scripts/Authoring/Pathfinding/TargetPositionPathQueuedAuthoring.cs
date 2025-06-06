@@ -1,16 +1,21 @@
+using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class TargetPositionPathQueuedAuthoring : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+	public class Baker : Baker<TargetPositionPathQueuedAuthoring>
+	{
+		public override void Bake(TargetPositionPathQueuedAuthoring authoring)
+		{
+			var entity = GetEntity(TransformUsageFlags.Dynamic);
+			AddComponent(entity, new TargetPositionPathQueued());
+			SetComponentEnabled<TargetPositionPathQueued>(entity, false);
+		}
+	}
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public struct TargetPositionPathQueued : IComponentData, IEnableableComponent
+{
+	public float3 TargetPosition;
 }

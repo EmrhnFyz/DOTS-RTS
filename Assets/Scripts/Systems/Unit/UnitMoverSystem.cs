@@ -8,6 +8,7 @@ internal partial struct UnitMoverSystem : ISystem
 {
 	public void OnCreate(ref SystemState state)
 	{
+		state.RequireForUpdate<PhysicsWorldSingleton>();
 		state.RequireForUpdate<GridSystem.GridSystemData>();
 	}
 
@@ -15,7 +16,44 @@ internal partial struct UnitMoverSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var gridSystemData = SystemAPI.GetSingleton<GridSystem.GridSystemData>();
-		foreach (var (localTransform, flowFieldFollower, enabledFlowFieldFollower, unitMover)
+		var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+		var collisionWorld = physicsWorldSingleton.CollisionWorld;
+
+		foreach (var (localTransform,
+			         targetPositionPathQueued,
+			         targetPositionPathQueuedEnabled,
+			         flowFieldPathRequest,
+			         flowFieldPathRequestEnabled,
+			         unitMover)
+		         in SystemAPI.Query<RefRO<LocalTransform>,
+			         RefRW<TargetPositionPathQueued>,
+			         EnabledRefRW<TargetPositionPathQueued>,
+			         RefRW<FlowFieldPathRequest>,
+			         EnabledRefRW<FlowFieldPathRequest>,
+			         RefRW<UnitMover>>().WithPresent<FlowFieldPathRequest>())
+		{
+			var raycastInput = new RaycastInput
+			                   {
+				                   Start = localTransform.ValueRO.Position,
+				                   End = targetPositionPathQueued.ValueRO.TargetPosition,
+				                   Filter = GameConfig.PathfindingWallCollisionFilter
+			                   };
+
+			if (!collisionWorld.CastRay(raycastInput))
+			{
+				// No wall in the way, proceed with the target position
+				unitMover.ValueRW.TargetPosition = targetPositionPathQueued.ValueRO.TargetPosition;
+			}
+			else
+			{
+				flowFieldPathRequest.ValueRW.TargetPosition = targetPositionPathQueued.ValueRO.TargetPosition;
+				flowFieldPathRequestEnabled.ValueRW = true;
+			}
+
+			targetPositionPathQueuedEnabled.ValueRW = false;
+		}
+
+		foreach (var (localTransform, flowFieldFollower, flowFieldFollowerEnabled, unitMover)
 		         in SystemAPI.Query<RefRO<LocalTransform>, RefRW<FlowFieldFollower>, EnabledRefRW<FlowFieldFollower>, RefRW<UnitMover>>())
 		{
 			var gridPosition = GridSystem.GetGridPosition(localTransform.ValueRO.Position, gridSystemData.CellSize);
@@ -38,7 +76,21 @@ internal partial struct UnitMoverSystem : ISystem
 			if (math.distance(localTransform.ValueRO.Position, flowFieldFollower.ValueRO.TargetPosition) < gridSystemData.CellSize * 0.5f)
 			{
 				unitMover.ValueRW.TargetPosition = localTransform.ValueRO.Position;
-				enabledFlowFieldFollower.ValueRW = false;
+				flowFieldFollowerEnabled.ValueRW = false;
+			}
+
+			var raycastInput = new RaycastInput
+			                   {
+				                   Start = localTransform.ValueRO.Position,
+				                   End = flowFieldFollower.ValueRO.TargetPosition,
+				                   Filter = GameConfig.PathfindingWallCollisionFilter
+			                   };
+
+			if (!collisionWorld.CastRay(raycastInput))
+			{
+				// No wall in the way, proceed with the target position
+				unitMover.ValueRW.TargetPosition = flowFieldFollower.ValueRO.TargetPosition;
+				flowFieldFollowerEnabled.ValueRW = false;
 			}
 		}
 

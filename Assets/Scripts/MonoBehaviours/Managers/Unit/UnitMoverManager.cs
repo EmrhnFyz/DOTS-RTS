@@ -85,10 +85,10 @@ public class UnitMoverManager : MonoBehaviour
 		if (!isAttackingSingleTarget)
 		{
 			TrySetBarracksRallyPosition();
-			var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<MoveOverride, FlowFieldPathRequest>().Build(_entityManager);
+			var entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<MoveOverride, TargetPositionPathQueued, FlowFieldFollower, FlowFieldPathRequest>().Build(_entityManager);
 			var entityArray = entityQuery.ToEntityArray(Allocator.Temp);
 			var moveOverrideArray = entityQuery.ToComponentDataArray<MoveOverride>(Allocator.Temp);
-			var flowFieldPathRequestArray = entityQuery.ToComponentDataArray<FlowFieldPathRequest>(Allocator.Temp);
+			var targetPositionPathQueuedArray = entityQuery.ToComponentDataArray<TargetPositionPathQueued>(Allocator.Temp);
 
 			if (moveOverrideArray.Length == 0)
 			{
@@ -106,14 +106,17 @@ public class UnitMoverManager : MonoBehaviour
 				moveOverrideArray[i] = moveOverride;
 				_entityManager.SetComponentEnabled<MoveOverride>(entityArray[i], true);
 
-				var flowFieldPathRequest = flowFieldPathRequestArray[i];
-				flowFieldPathRequest.TargetPosition = formation[i];
-				flowFieldPathRequestArray[i] = flowFieldPathRequest;
-				_entityManager.SetComponentEnabled<FlowFieldPathRequest>(entityArray[i], true);
+				var targetPositionPathQueued = targetPositionPathQueuedArray[i];
+				targetPositionPathQueued.TargetPosition = formation[i];
+				targetPositionPathQueuedArray[i] = targetPositionPathQueued;
+				_entityManager.SetComponentEnabled<TargetPositionPathQueued>(entityArray[i], true);
+
+				_entityManager.SetComponentEnabled<FlowFieldPathRequest>(entityArray[i], false);
+				_entityManager.SetComponentEnabled<FlowFieldFollower>(entityArray[i], false);
 			}
 
 			entityQuery.CopyFromComponentDataArray(moveOverrideArray);
-			entityQuery.CopyFromComponentDataArray(flowFieldPathRequestArray);
+			entityQuery.CopyFromComponentDataArray(targetPositionPathQueuedArray);
 		}
 	}
 
