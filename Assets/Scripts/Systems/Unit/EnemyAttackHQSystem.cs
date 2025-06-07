@@ -17,14 +17,16 @@ internal partial struct EnemyAttackHQSystem : ISystem
 
 		var hqPosition = SystemAPI.GetComponent<LocalTransform>(hqEntity).Position;
 
-		foreach (var (attackHq, target, unitMover) in SystemAPI.Query<RefRO<EnemyAttackHQ>, RefRO<Target>, RefRW<UnitMover>>().WithDisabled<MoveOverride>())
+		foreach (var (attackHq, target, targetPositionPathQueued, targetPositionPathQueuedEnabled)
+		         in SystemAPI.Query<RefRO<EnemyAttackHQ>, RefRO<Target>, RefRW<TargetPositionPathQueued>, EnabledRefRW<TargetPositionPathQueued>>().WithDisabled<MoveOverride>().WithPresent<TargetPositionPathQueued>())
 		{
 			if (target.ValueRO.TargetEntity != Entity.Null)
 			{
 				continue;
 			}
 
-			unitMover.ValueRW.TargetPosition = hqPosition;
+			targetPositionPathQueued.ValueRW.TargetPosition = hqPosition;
+			targetPositionPathQueuedEnabled.ValueRW = true;
 		}
 	}
 }

@@ -80,6 +80,11 @@ public class BuildingPlacementManager : MonoBehaviour
 
 	private void CancelBuildingPlacement(InputAction.CallbackContext context)
 	{
+		if (buildingTypeSO.buildingType == BuildingType.None)
+		{
+			return;
+		}
+
 		onBuildingPlacementCancelledEventChannel.Raise(new VoidEvent());
 	}
 

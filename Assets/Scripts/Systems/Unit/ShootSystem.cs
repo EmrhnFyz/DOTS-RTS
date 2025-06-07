@@ -16,8 +16,20 @@ internal partial struct ShootSystem : ISystem
 	public void OnUpdate(ref SystemState state)
 	{
 		var entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-		foreach (var (localTransform, shoot, target, findTarget, unitMover)
-		         in SystemAPI.Query<RefRW<LocalTransform>, RefRO<Shoot>, RefRO<Target>, RefRO<FindTarget>, RefRW<UnitMover>>().WithDisabled<MoveOverride>())
+		foreach (var (localTransform,
+			         shoot,
+			         target,
+			         findTarget,
+			         unitMover,
+			         targetPositionPathQueued,
+			         targetPositionPathQueuedEnabled)
+		         in SystemAPI.Query<RefRW<LocalTransform>,
+			         RefRO<Shoot>,
+			         RefRO<Target>,
+			         RefRO<FindTarget>,
+			         RefRW<UnitMover>,
+			         RefRW<TargetPositionPathQueued>,
+			         EnabledRefRW<TargetPositionPathQueued>>().WithDisabled<MoveOverride>().WithPresent<TargetPositionPathQueued>())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
@@ -29,11 +41,14 @@ internal partial struct ShootSystem : ISystem
 
 			if (distanceToTarget > findTarget.ValueRO.Range - GameConfig.TARGET_PROXIMITY_TRESHOLD)
 			{
-				unitMover.ValueRW.TargetPosition = targetLocalTransform.Position;
+				targetPositionPathQueued.ValueRW.TargetPosition = targetLocalTransform.Position;
+				targetPositionPathQueuedEnabled.ValueRW = true;
+
 				continue;
 			}
 
-			unitMover.ValueRW.TargetPosition = localTransform.ValueRO.Position;
+			targetPositionPathQueued.ValueRW.TargetPosition = localTransform.ValueRO.Position;
+			targetPositionPathQueuedEnabled.ValueRW = true;
 			var aimDirection = math.normalize(targetLocalTransform.Position - localTransform.ValueRO.Position);
 
 			var targetRotation = quaternion.LookRotation(aimDirection, math.up());

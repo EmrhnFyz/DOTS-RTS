@@ -7,6 +7,7 @@ public class GameConfig : MonoBehaviour
 	public const int AMMUNITION_LAYER = 7; // Layer for ammunition
 	public const int BUILDING_LAYER = 8; // Layer for buildings
 	public const int PATHFINDING_WALLS = 9; // Layer for pathfinding walls
+	public const int PATHFINDING_HEAVY = 10; // Layer for pathfinding heavy
 
 	public const float REACH_TARGET_DISTANCE_SQ = 0.01f; // Squared distance to consider the target reached
 	public const float TARGET_PROXIMITY_TRESHOLD = 3f; // Distance threshold to consider a target nearby
@@ -16,28 +17,35 @@ public class GameConfig : MonoBehaviour
 	public static Camera CachedCamera { get; private set; } // Cached camera reference
 
 	public static readonly CollisionFilter UnitSelectionCollisionFilter = new()
-	                                                                      {
-		                                                                      BelongsTo = ~0u,
-		                                                                      CollidesWith = 1u << UNIT_LAYER,
-		                                                                      GroupIndex = 0
-	                                                                      };
+	{
+		BelongsTo = ~0u,
+		CollidesWith = 1u << UNIT_LAYER,
+		GroupIndex = 0
+	};
 
 	/// <summary>
 	///     This collision filter is used for faction related entities like units and buildings.
 	/// </summary>
 	public static readonly CollisionFilter FactionSelectionCollisionFilter = new()
-	                                                                         {
-		                                                                         BelongsTo = ~0u,
-		                                                                         CollidesWith = (1u << UNIT_LAYER) | (1u << BUILDING_LAYER),
-		                                                                         GroupIndex = 0
-	                                                                         };
+	{
+		BelongsTo = ~0u,
+		CollidesWith = (1u << UNIT_LAYER) | (1u << BUILDING_LAYER),
+		GroupIndex = 0
+	};
 
 	public static readonly CollisionFilter PathfindingWallCollisionFilter = new()
-	                                                                        {
-		                                                                        BelongsTo = ~0u,
-		                                                                        CollidesWith = 1u << PATHFINDING_WALLS,
-		                                                                        GroupIndex = 0
-	                                                                        };
+	{
+		BelongsTo = ~0u,
+		CollidesWith = 1u << PATHFINDING_WALLS,
+		GroupIndex = 0
+	};
+
+	public static readonly CollisionFilter PathfindinHeavyCollisionFilter = new()
+	{
+		BelongsTo = ~0u,
+		CollidesWith = 1u << PATHFINDING_HEAVY,
+		GroupIndex = 0
+	};
 
 	[SerializeField] private BuildingTypeSOEventChannelSO onActiveBuildingTypeChangedEventChannel;
 

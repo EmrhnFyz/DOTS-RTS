@@ -18,8 +18,8 @@ internal partial struct MeleeAttackSystem : ISystem
 		var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
 		var collisionWorld = physicsWorldSingleton.CollisionWorld;
 		var raycastHitList = new NativeList<RaycastHit>(Allocator.Temp);
-		foreach (var (localTransform, target, meleeAttack, unitMover)
-		         in SystemAPI.Query<RefRO<LocalTransform>, RefRO<Target>, RefRW<MeleeAttack>, RefRW<UnitMover>>().WithDisabled<MoveOverride>())
+		foreach (var (localTransform, target, meleeAttack, targetPositionPathQueued, targetPositionPathQueuedEnabled)
+		         in SystemAPI.Query<RefRO<LocalTransform>, RefRO<Target>, RefRW<MeleeAttack>, RefRW<TargetPositionPathQueued>, EnabledRefRW<TargetPositionPathQueued>>().WithDisabled<MoveOverride>().WithPresent<TargetPositionPathQueued>())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
@@ -59,11 +59,13 @@ internal partial struct MeleeAttackSystem : ISystem
 
 			if (!isCloseEnoughToAttack && !isTouchingTarget)
 			{
-				unitMover.ValueRW.TargetPosition = targetLocalTransform.Position;
+				targetPositionPathQueued.ValueRW.TargetPosition = targetLocalTransform.Position;
+				targetPositionPathQueuedEnabled.ValueRW = true;
 			}
 			else
 			{
-				unitMover.ValueRW.TargetPosition = localTransform.ValueRO.Position;
+				targetPositionPathQueued.ValueRW.TargetPosition = localTransform.ValueRO.Position;
+				targetPositionPathQueuedEnabled.ValueRW = true;
 
 				meleeAttack.ValueRW.Timer -= SystemAPI.Time.DeltaTime;
 

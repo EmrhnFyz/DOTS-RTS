@@ -8,7 +8,8 @@ internal partial struct RandomWalkingSystem : ISystem
 	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
-		foreach (var (randomWalking, unitMover, localTransform) in SystemAPI.Query<RefRW<RandomWalking>, RefRW<UnitMover>, RefRO<LocalTransform>>())
+		foreach (var (randomWalking, targetPositionPathQueued, targetPositionPathQueuedEnabled, localTransform)
+		         in SystemAPI.Query<RefRW<RandomWalking>, RefRW<TargetPositionPathQueued>, EnabledRefRW<TargetPositionPathQueued>, RefRO<LocalTransform>>().WithPresent<TargetPositionPathQueued>())
 		{
 			if (math.distancesq(localTransform.ValueRO.Position, randomWalking.ValueRO.TargetPosition) < GameConfig.REACH_TARGET_DISTANCE_SQ)
 			{
@@ -22,7 +23,8 @@ internal partial struct RandomWalkingSystem : ISystem
 			}
 			else
 			{
-				unitMover.ValueRW.TargetPosition = randomWalking.ValueRO.TargetPosition;
+				targetPositionPathQueued.ValueRW.TargetPosition = randomWalking.ValueRO.TargetPosition;
+				targetPositionPathQueuedEnabled.ValueRW = true;
 			}
 		}
 	}
