@@ -13,7 +13,8 @@ internal partial struct LoseTargetSystem : ISystem
 	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
-		foreach (var (localTransform, loseTarget, targetOverride, target) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<LoseTarget>, RefRO<TargetOverride>, RefRW<Target>>())
+		foreach (var (localTransform, loseTarget, targetOverride, target)
+		         in SystemAPI.Query<RefRO<LocalTransform>, RefRO<LoseTarget>, RefRO<TargetOverride>, RefRW<Target>>())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
