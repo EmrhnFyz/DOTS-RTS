@@ -405,7 +405,7 @@ public partial struct UpdateCostMapJob : IJobFor
 		if (CollisionWorld.OverlapSphere(GridSystem.GetWorldCenterPosition(gridPosition.x, gridPosition.y, CellSize),
 										 HalfCellSize,
 										 ref distanceHitList,
-										 GameConfig.PathfindinHeavyCollisionFilter))
+										 GameConfig.PathfindingHeavyCollisionFilter))
 		{
 			var gridNode = GridNodeLookup[GridMap.GridEntityArray[index]];
 			gridNode.Cost = GridSystem.HEAVY_COST;

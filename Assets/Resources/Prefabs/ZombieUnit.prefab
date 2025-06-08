@@ -145,7 +145,8 @@ PrefabInstance:
       value: ZombieUnit
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7553829437435732876, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8451252528002914600, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
@@ -154,7 +155,76 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8451252528002914600, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5096644207726622083}
+    - targetCorrespondingSourceObject: {fileID: 825237179927179248, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 603237294307930197}
+    - targetCorrespondingSourceObject: {fileID: 5153169456898544666, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4759335299279359757}
+    - targetCorrespondingSourceObject: {fileID: 4846135002462877185, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1179313942680223481}
+    - targetCorrespondingSourceObject: {fileID: 5927957197437066609, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9098870630137411587}
   m_SourcePrefab: {fileID: 100100000, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+--- !u!1 &217036688031979163 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5927957197437066609, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+  m_PrefabInstance: {fileID: 5856724736354765802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9098870630137411587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217036688031979163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71fc8278d1fd8e4083227aa22b914b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentGameObject: {fileID: 2598477461324239554}
+  sphereCastSize: 0.1
+--- !u!1 &1299193959373454827 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4846135002462877185, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+  m_PrefabInstance: {fileID: 5856724736354765802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1179313942680223481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299193959373454827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71fc8278d1fd8e4083227aa22b914b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentGameObject: {fileID: 2598477461324239554}
+  sphereCastSize: 0.1
+--- !u!1 &1640709184880107504 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5153169456898544666, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+  m_PrefabInstance: {fileID: 5856724736354765802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4759335299279359757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640709184880107504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71fc8278d1fd8e4083227aa22b914b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentGameObject: {fileID: 2598477461324239554}
+  sphereCastSize: 0.1
 --- !u!1 &2598477461324239554 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8451252528002914600, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
@@ -188,3 +258,22 @@ MonoBehaviour:
   damageAmount: 10
   colliderSize: 1
   attackDistance: 2
+--- !u!1 &6499979358733231130 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 825237179927179248, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+  m_PrefabInstance: {fileID: 5856724736354765802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &603237294307930197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6499979358733231130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71fc8278d1fd8e4083227aa22b914b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentGameObject: {fileID: 2598477461324239554}
+  sphereCastSize: 0.1

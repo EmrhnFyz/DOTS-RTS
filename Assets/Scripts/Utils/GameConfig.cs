@@ -8,6 +8,7 @@ public class GameConfig : MonoBehaviour
 	public const int BUILDING_LAYER = 8; // Layer for buildings
 	public const int PATHFINDING_WALLS = 9; // Layer for pathfinding walls
 	public const int PATHFINDING_HEAVY = 10; // Layer for pathfinding heavy
+	public const int FOW_LAYER = 12;
 
 	public const float REACH_TARGET_DISTANCE_SQ = 0.01f; // Squared distance to consider the target reached
 	public const float TARGET_PROXIMITY_TRESHOLD = 3f; // Distance threshold to consider a target nearby
@@ -40,10 +41,24 @@ public class GameConfig : MonoBehaviour
 		GroupIndex = 0
 	};
 
-	public static readonly CollisionFilter PathfindinHeavyCollisionFilter = new()
+	public static readonly CollisionFilter PathfindingHeavyCollisionFilter = new()
 	{
 		BelongsTo = ~0u,
 		CollidesWith = 1u << PATHFINDING_HEAVY,
+		GroupIndex = 0
+	};
+
+	public static readonly CollisionFilter MeleeAttackCollisionFilter = new()
+	{
+		BelongsTo = ~0u,
+		CollidesWith = 1u << UNIT_LAYER | 1u << BUILDING_LAYER,
+		GroupIndex = 0
+	};
+
+	public static readonly CollisionFilter FOWCollisionFilter = new()
+	{
+		BelongsTo = ~0u,
+		CollidesWith = 1u << FOW_LAYER,
 		GroupIndex = 0
 	};
 
