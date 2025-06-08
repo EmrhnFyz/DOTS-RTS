@@ -131,6 +131,39 @@ public class BuildingPlacementManager : MonoBehaviour
 			return false;
 		}
 
+		if (buildingTypeSO is ResourceHarvesterTypeSO resourceHarvesterTypeSO)
+		{
+			var hasValidResource = false;
+			var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
+			if (collisionWorld.OverlapSphere(
+				mouseWorldPosition,
+				resourceHarvesterTypeSO.harvestDistance,
+				ref distanceHitList,
+				GameConfig.BuildingPlacementCollisionFilter
+			))
+			{
+				// hit something within harvest distance
+				foreach (var distanceHit in distanceHitList)
+				{
+					if (entityManager.HasComponent<ResourceTypeSOHolder>(distanceHit.Entity))
+					{
+						var resourceTypeSOHolder = entityManager.GetComponentData<ResourceTypeSOHolder>(distanceHit.Entity);
+						if (resourceTypeSOHolder.ResourceType == resourceHarvesterTypeSO.resourceType)
+						{
+							// nearby valid resource
+							hasValidResource = true;
+							break;
+						}
+					}
+				}
+			}
+
+			if (!hasValidResource)
+			{
+				return false;
+			}
+		}
+
 		return true;
 	}
 }

@@ -7,7 +7,10 @@ public enum BuildingType
 	ZombieSpawner,
 	Turret,
 	Barracks,
-	HQ
+	HQ,
+	GoldHarvester,
+	IronHarvester,
+	OilHarvester
 }
 
 
@@ -33,6 +36,12 @@ public class BuildingTypeSO : ScriptableObject
 				return references.BarracksPrefabEntity;
 			case BuildingType.Turret:
 				return references.TurretPrefabEntity;
+			case BuildingType.GoldHarvester:
+				return references.GoldHarvesterPrefabEntity;
+			case BuildingType.IronHarvester:
+				return references.IronHarvesterPrefabEntity;
+			case BuildingType.OilHarvester:
+				return references.OilHarvesterPrefabEntity;
 		}
 	}
 }

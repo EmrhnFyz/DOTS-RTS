@@ -1,16 +1,18 @@
 using UnityEngine;
 
-public class ResourceTypeSO : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public enum ResourceType
+{
+    None,
+    Iron,
+    Gold,
+    Oil
+}
+
+[CreateAssetMenu(fileName = "ResourceTypeSO", menuName = "ResourceTypes/ResourceTypeSO")]
+public class ResourceTypeSO : ScriptableObject
+{
+    public ResourceType ResourceType;
+    public Sprite Sprite;
+
 }

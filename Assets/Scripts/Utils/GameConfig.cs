@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class GameConfig : MonoBehaviour
 {
+	public const int DEFAULT_LAYER = 0;
 	public const int UNIT_LAYER = 6; // Layer for units
 	public const int AMMUNITION_LAYER = 7; // Layer for ammunition
 	public const int BUILDING_LAYER = 8; // Layer for buildings
@@ -31,6 +32,13 @@ public class GameConfig : MonoBehaviour
 	{
 		BelongsTo = ~0u,
 		CollidesWith = (1u << UNIT_LAYER) | (1u << BUILDING_LAYER),
+		GroupIndex = 0
+	};
+
+	public static readonly CollisionFilter BuildingPlacementCollisionFilter = new()
+	{
+		BelongsTo = ~0u,
+		CollidesWith = (1u << BUILDING_LAYER) | (1u << DEFAULT_LAYER),
 		GroupIndex = 0
 	};
 

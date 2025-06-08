@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4740338003891858349}
   - component: {fileID: 3797822052277700049}
   - component: {fileID: 6028077768994438932}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 8462916404054332261}
   - component: {fileID: 3766692982293930281}
   - component: {fileID: 6110536700749204291}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8961270416754183474}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 832921247004401337}
   - component: {fileID: 6207157229384195520}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
