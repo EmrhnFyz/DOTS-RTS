@@ -17,5 +17,10 @@ MonoBehaviour:
   isPlaceable: 1
   iconSprite: {fileID: 21300000, guid: d68723ce033c83c45b0fd17e2ab8404d, type: 3}
   visualPrefab: {fileID: 8686191080717679773, guid: 986eac81f4856df47bacc9ed8bf0ea6d, type: 3}
+  cost:
+  - ResourceType: 2
+    Amount: 15
+  constructionTimerMax: 10
+  constructionYOffset: -2.81
   resourceType: 1
   harvestDistance: 10

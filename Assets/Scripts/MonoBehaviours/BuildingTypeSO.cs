@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Unity.Entities;
 using UnityEngine;
 
@@ -26,6 +27,11 @@ public class BuildingTypeSO : ScriptableObject
 
 	public Transform visualPrefab;
 
+	public ResourceAmount[] cost;
+
+	public float constructionTimerMax;
+	public float constructionYOffset;
+
 	public Entity GetBuildingPrefabEntity(EntitiesReferences references)
 	{
 		switch (buildingType)
@@ -42,6 +48,25 @@ public class BuildingTypeSO : ScriptableObject
 				return references.IronHarvesterPrefabEntity;
 			case BuildingType.OilHarvester:
 				return references.OilHarvesterPrefabEntity;
+		}
+	}
+
+	public Entity GetConstructionVisualPrefabEntity(EntitiesReferences references)
+	{
+		switch (buildingType)
+		{
+			default:
+			case BuildingType.None:
+			case BuildingType.Barracks:
+				return references.BarracksVisualPrefabEntity;
+			case BuildingType.Turret:
+				return references.TurretVisualPrefabEntity;
+			case BuildingType.GoldHarvester:
+				return references.GoldHarvesterVisualPrefabEntity;
+			case BuildingType.IronHarvester:
+				return references.IronHarvesterVisualPrefabEntity;
+			case BuildingType.OilHarvester:
+				return references.OilHarvesterVisualPrefabEntity;
 		}
 	}
 }

@@ -104,18 +104,38 @@ public class BuildingPlacementManager : MonoBehaviour
 
 		if (CanPlaceBuilding())
 		{
+			var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
+
+
+			ResourceManager.Instance.TrySpendResource(buildingTypeSO.cost);
 			var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 			var entityQuery = entityManager.CreateEntityQuery(typeof(EntitiesReferences));
 			var entityReferences = entityQuery.GetSingleton<EntitiesReferences>();
 
-			var spawnedBuildingEntity = entityManager.Instantiate(buildingTypeSO.GetBuildingPrefabEntity(entityReferences));
-			entityManager.SetComponentData(spawnedBuildingEntity, LocalTransform.FromPosition(MouseWorldPosition.Instance.GetMousePosition()));
+
+			var spawnedConstructionVisualEntity = entityManager.Instantiate(buildingTypeSO.GetConstructionVisualPrefabEntity(entityReferences));
+			entityManager.SetComponentData(spawnedConstructionVisualEntity, LocalTransform.FromPosition(mouseWorldPosition + new Vector3(0, buildingTypeSO.constructionYOffset, 0)));
+
+			var spawnedConstructionEntity = entityManager.Instantiate(entityReferences.ConstructionPrefabEntity);
+			entityManager.SetComponentData(spawnedConstructionEntity, LocalTransform.FromPosition(mouseWorldPosition));
+
+			entityManager.SetComponentData(spawnedConstructionEntity, new Construction
+			{
+				BuildingType = buildingTypeSO.buildingType,
+				ConstructionTimer = 0f,
+				ConstructionTimeMax = buildingTypeSO.constructionTimerMax,
+				FinalPrefabEntity = buildingTypeSO.GetBuildingPrefabEntity(entityReferences),
+				VisualEntity = spawnedConstructionVisualEntity,
+				StartPosition = mouseWorldPosition + new Vector3(0, buildingTypeSO.constructionYOffset, 0),
+				EndPosition = mouseWorldPosition
+			});
+
 		}
 	}
 
 	private bool CanPlaceBuilding()
 	{
-		if (!buildingTypeSO || !buildingTypeSO.isPlaceable || buildingTypeSO.buildingType == BuildingType.None)
+		if (!buildingTypeSO || !buildingTypeSO.isPlaceable || buildingTypeSO.buildingType == BuildingType.None || !ResourceManager.Instance.CanAfford(buildingTypeSO.cost))
 		{
 			return false;
 		}

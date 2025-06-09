@@ -449,6 +449,12 @@ MonoBehaviour:
   goldHarvesterPrefabGameObject: {fileID: 5132162001707578854, guid: a8243029b65dbbc468ce7c5590816dc1, type: 3}
   ironHarvesterPrefabGameObject: {fileID: 9155729273995862447, guid: 9770c5ce0a5bd6f4f86c739b75cb66c5, type: 3}
   oilHarvesterPrefabGameObject: {fileID: 719104255243815379, guid: da864f7f88886414a8a2ea9c1e78848f, type: 3}
+  constructionPrefabGameObject: {fileID: 562402393893207444, guid: 2b93a1149309aef42aa8b65c8333c944, type: 3}
+  barracksVisualPrefabGameObject: {fileID: 4706748135037623080, guid: 92710707c5657274e8c31751bad9f2f2, type: 3}
+  turretVisualPrefabGameObject: {fileID: 6607213751822299544, guid: e3e01d311808ecf43a5373d5a1d2f1ab, type: 3}
+  goldHarvesterVisualPrefabGameObject: {fileID: 4499998760003975059, guid: d92e1b4fc516b61468081516cc5c14f1, type: 3}
+  ironHarvesterVisualPrefabGameObject: {fileID: 184314028090552627, guid: 986eac81f4856df47bacc9ed8bf0ea6d, type: 3}
+  oilHarvesterVisualPrefabGameObject: {fileID: 4785703203425898357, guid: 2e71adb493af6ac46980b7cb9775dd45, type: 3}
 --- !u!1001 &1668678372
 PrefabInstance:
   m_ObjectHideFlags: 0

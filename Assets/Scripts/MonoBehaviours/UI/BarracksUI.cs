@@ -174,18 +174,27 @@ public class BarracksUI : MonoBehaviour
 
 	private void AddUnitToSpawnQueue(UnitType unitType)
 	{
+		var unitTypeSO = GameConfig.Instance.unitTypeListSO.GetUnitTypeSO(unitType);
+
+		if (!ResourceManager.Instance.CanAfford(unitTypeSO.cost))
+		{
+			return;
+		}
+
 		if (TrySetSelectedBarracks())
 		{
 			return;
 		}
 
+		ResourceManager.Instance.TrySpendResource(unitTypeSO.cost);
+
 		var spawnUnitTypeDynamicBuffer = _entityManager.GetBuffer<SpawnUnitTypeBuffer>(GetCurrentSelectedBarrackData().BarracksEntity);
 
 		PlaceUnitQueueImage(unitType);
 		spawnUnitTypeDynamicBuffer.Add(new SpawnUnitTypeBuffer
-		                               {
-			                               UnitType = unitType
-		                               });
+		{
+			UnitType = unitType
+		});
 	}
 
 
@@ -206,10 +215,10 @@ public class BarracksUI : MonoBehaviour
 				if (!_barracksEntityDictionary.ContainsKey(barracksArray[0].Index))
 				{
 					var barracksData = new BarracksData
-					                   {
-						                   BarracksEntity = barracksArray[0],
-						                   ActiveQueue = new Queue<Image>(30)
-					                   };
+					{
+						BarracksEntity = barracksArray[0],
+						ActiveQueue = new Queue<Image>(30)
+					};
 
 					_barracksEntityDictionary.Add(barracksArray[0].Index, barracksData);
 				}

@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitType: 2
   spawnTime: 2
+  cost:
+  - ResourceType: 1
+    Amount: 5
+  - ResourceType: 2
+    Amount: 5

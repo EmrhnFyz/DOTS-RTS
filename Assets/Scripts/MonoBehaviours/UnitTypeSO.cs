@@ -14,6 +14,7 @@ public class UnitTypeSO : ScriptableObject
 {
 	public UnitType unitType;
 	public float spawnTime;
+	public ResourceAmount[] cost;
 
 	public Entity GetPrefabEntity(EntitiesReferences entitiesReference)
 	{
