@@ -19,14 +19,4 @@ MonoBehaviour:
   - {fileID: 4300000, guid: b4e584a84faf4214090e0b98f87ef376, type: 2}
   - {fileID: 4300000, guid: 8e7ff241e1a153b4b8fa556833c83504, type: 2}
   - {fileID: 4300000, guid: d5604c99bec6d774d8183173fef8e344, type: 2}
-  - {fileID: 4300000, guid: 5c47c8d1d5e21b54c95ecaf9da6ec594, type: 2}
-  - {fileID: 4300000, guid: d25f6b9bd12165b4e8eca0531bba736d, type: 2}
-  - {fileID: 4300000, guid: 05d18dd541c5b8b4d981c08f45332201, type: 2}
-  - {fileID: 4300000, guid: b794891fbec67c042b789145b4d55dd6, type: 2}
-  - {fileID: 4300000, guid: 70b306b85b5429946ad760b13e473aab, type: 2}
-  - {fileID: 4300000, guid: 99bb3021df3897d478aed82dd4f21dde, type: 2}
-  - {fileID: 4300000, guid: 8d4ae86eebc82f5498baa366ddaeda4e, type: 2}
-  - {fileID: 4300000, guid: 736a1a8df1b51e24d9f12953f2fb0d52, type: 2}
-  - {fileID: 4300000, guid: 36dab5d21c147bc4dbd0f7931127d29f, type: 2}
-  - {fileID: 4300000, guid: db5635d30e29b5443945ce5c35d7d771, type: 2}
   frameTimerMax: 0.05
