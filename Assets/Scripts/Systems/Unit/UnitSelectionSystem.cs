@@ -7,6 +7,12 @@ using Unity.Transforms;
 internal partial struct UnitSelectionSystem : ISystem
 {
 	[BurstCompile]
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<GameSceneTag>();
+	}
+
+	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
 		foreach (var selected in SystemAPI.Query<RefRO<Selected>>().WithPresent<Selected>())

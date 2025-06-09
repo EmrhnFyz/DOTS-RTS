@@ -14,6 +14,8 @@ internal partial struct ResetEventsSystem : ISystem
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<HQ>();
+		state.RequireForUpdate<GameSceneTag>();
+
 		_jobHandleNativeArray = new NativeArray<JobHandle>(3, Allocator.Persistent);
 		_onDeathEntityList = new NativeList<Entity>(Allocator.Persistent);
 	}

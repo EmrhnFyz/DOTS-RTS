@@ -8,6 +8,7 @@ internal partial struct EnemyAttackHQSystem : ISystem
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<HQ>();
+		state.RequireForUpdate<GameSceneTag>();
 	}
 
 	[BurstCompile]

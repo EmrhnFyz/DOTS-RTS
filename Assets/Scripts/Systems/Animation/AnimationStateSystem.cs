@@ -11,6 +11,7 @@ internal partial struct AnimationStateSystem : ISystem
 	public void OnCreate(ref SystemState state)
 	{
 		_activeAnimationLookup = state.GetComponentLookup<ActiveAnimation>();
+		state.RequireForUpdate<GameSceneTag>();
 	}
 
 	[BurstCompile]

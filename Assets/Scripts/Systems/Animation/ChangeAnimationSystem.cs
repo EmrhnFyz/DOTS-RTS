@@ -8,6 +8,7 @@ internal partial struct ChangeAnimationSystem : ISystem
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<AnimationDataHolder>();
+		state.RequireForUpdate<GameSceneTag>();
 	}
 
 	[BurstCompile]

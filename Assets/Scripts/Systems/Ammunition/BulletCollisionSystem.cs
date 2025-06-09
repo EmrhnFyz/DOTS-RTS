@@ -15,6 +15,7 @@ internal partial struct BulletCollisionSystem : ISystem
 	{
 		state.RequireForUpdate<EndFixedStepSimulationEntityCommandBufferSystem.Singleton>();
 		state.RequireForUpdate<SimulationSingleton>();
+		state.RequireForUpdate<GameSceneTag>();
 		_bulletLookup = state.GetComponentLookup<Bullet>();
 		_healthLookup = state.GetComponentLookup<Health>();
 		_friendlyLookup = state.GetComponentLookup<Friendly>(true); // Read-only lookup for friendly entities

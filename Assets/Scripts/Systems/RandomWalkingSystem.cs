@@ -6,6 +6,12 @@ using Unity.Transforms;
 internal partial struct RandomWalkingSystem : ISystem
 {
 	[BurstCompile]
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<GameSceneTag>();
+	}
+
+	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
 		foreach (var (randomWalking, targetPositionPathQueued, targetPositionPathQueuedEnabled, localTransform)

@@ -1,3 +1,5 @@
+//#define GRID_DEBUG
+
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -94,14 +96,17 @@ public partial struct GridSystem : ISystem
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionLeft, width)]);
 		}
+
 		if (IsValidGridPosition(positionRight, width, height))
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionRight, width)]);
 		}
+
 		if (IsValidGridPosition(positionUp, width, height))
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionUp, width)]);
 		}
+
 		if (IsValidGridPosition(positionDown, width, height))
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionDown, width)]);
@@ -111,14 +116,17 @@ public partial struct GridSystem : ISystem
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionLowerLeft, width)]);
 		}
+
 		if (IsValidGridPosition(positionLowerRight, width, height))
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionLowerRight, width)]);
 		}
+
 		if (IsValidGridPosition(positionUpperLeft, width, height))
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionUpperLeft, width)]);
 		}
+
 		if (IsValidGridPosition(positionUpperRight, width, height))
 		{
 			neighbourGridNodeList.Add(gridNodeNativeArray[CalculateIndex(positionUpperRight, width)]);
@@ -139,14 +147,17 @@ public partial struct GridSystem : ISystem
 		var gridPosition = GetGridPosition(worldPosition, cellSize);
 		return IsValidGridPosition(gridPosition, width, height) && !IsWall(gridPosition, width, gridCostArray);
 	}
-
+#if !GRID_DEBUG
 	[BurstCompile]
+#endif
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<PhysicsWorldSingleton>();
-		var width = 50;
-		var height = 50;
-		var gridCellSize = 1.5f;
+		state.RequireForUpdate<GameSceneTag>();
+
+		var width = 40;
+		var height = 40;
+		var gridCellSize = 5f;
 		var totalCells = width * height;
 		var gridNodeEntityPrefab = state.EntityManager.CreateEntity();
 		var totalGridMapEntityList = new NativeList<Entity>(FLOW_FIELD_MAP_COUNT * totalCells, Allocator.Persistent);
@@ -155,10 +166,10 @@ public partial struct GridSystem : ISystem
 		for (var i = 0; i < FLOW_FIELD_MAP_COUNT; i++)
 		{
 			var gridMap = new GridMap
-			{
-				IsValid = false,
-				GridEntityArray = new NativeArray<Entity>(totalCells, Allocator.Persistent)
-			};
+			              {
+				              IsValid = false,
+				              GridEntityArray = new NativeArray<Entity>(totalCells, Allocator.Persistent)
+			              };
 
 			state.EntityManager.Instantiate(gridNodeEntityPrefab, gridMap.GridEntityArray);
 			totalGridMapEntityList.AddRange(gridMap.GridEntityArray);
@@ -168,12 +179,12 @@ public partial struct GridSystem : ISystem
 				{
 					var index = CalculateIndex(x, y, width);
 					var gridNode = new GridNode
-					{
-						GridIndex = i,
-						Index = index,
-						X = x,
-						Y = y
-					};
+					               {
+						               GridIndex = i,
+						               Index = index,
+						               X = x,
+						               Y = y
+					               };
 					state.EntityManager.SetName(gridMap.GridEntityArray[index], $"GridNode_{x}_{y}");
 					SystemAPI.SetComponent(gridMap.GridEntityArray[index], gridNode);
 				}
@@ -184,33 +195,35 @@ public partial struct GridSystem : ISystem
 
 		state.EntityManager.AddComponent<GridSystemData>(state.SystemHandle);
 		state.EntityManager.SetComponentData(state.SystemHandle, new GridSystemData
-		{
-			Width = width,
-			Height = height,
-			CellSize = gridCellSize,
-			GridMapArray = gridMapArray,
-			GridCostArray = new NativeArray<byte>(totalCells, Allocator.Persistent),
-			TotalGridMapEntityArray = totalGridMapEntityList.ToArray(Allocator.Persistent)
-		});
+		                                                         {
+			                                                         Width = width,
+			                                                         Height = height,
+			                                                         CellSize = gridCellSize,
+			                                                         GridMapArray = gridMapArray,
+			                                                         GridCostArray = new NativeArray<byte>(totalCells, Allocator.Persistent),
+			                                                         TotalGridMapEntityArray = totalGridMapEntityList.ToArray(Allocator.Persistent)
+		                                                         });
 		totalGridMapEntityList.Dispose();
-		GridNodeLookup = SystemAPI.GetComponentLookup<GridNode>(false);
+		GridNodeLookup = SystemAPI.GetComponentLookup<GridNode>();
 	}
 
+#if !GRID_DEBUG
 	[BurstCompile]
+#endif
 	public void OnUpdate(ref SystemState state)
 	{
 		var gridSystemData = SystemAPI.GetComponent<GridSystemData>(state.SystemHandle);
 		GridNodeLookup.Update(ref state);
 
 		foreach (var (fieldPathRequest, flowFieldPathRequestEnabled, flowFieldFollower, flowFieldFollowerEnabled)
-				 in SystemAPI.Query<RefRW<FlowFieldPathRequest>, EnabledRefRW<FlowFieldPathRequest>, RefRW<FlowFieldFollower>, EnabledRefRW<FlowFieldFollower>>().WithPresent<FlowFieldFollower>())
+		         in SystemAPI.Query<RefRW<FlowFieldPathRequest>, EnabledRefRW<FlowFieldPathRequest>, RefRW<FlowFieldFollower>, EnabledRefRW<FlowFieldFollower>>().WithPresent<FlowFieldFollower>())
 		{
 			var targetGridPosition = GetGridPosition(fieldPathRequest.ValueRO.TargetPosition, gridSystemData.CellSize);
 
 			flowFieldPathRequestEnabled.ValueRW = false;
-			bool alreadyCalculatedPath = false;
+			var alreadyCalculatedPath = false;
 
-			for (int i = 0; i < FLOW_FIELD_MAP_COUNT; i++)
+			for (var i = 0; i < FLOW_FIELD_MAP_COUNT; i++)
 			{
 				if (gridSystemData.GridMapArray[i].IsValid && gridSystemData.GridMapArray[i].TargetGridPosition.Equals(targetGridPosition))
 				{
@@ -239,10 +252,10 @@ public partial struct GridSystem : ISystem
 			var gridNodeNativeArray = new NativeArray<RefRW<GridNode>>(gridSystemData.Width * gridSystemData.Height, Allocator.Temp);
 
 			var initializeGridJob = new InitializeGridJob
-			{
-				GridIndex = gridIndex,
-				TargetGridPosition = targetGridPosition
-			};
+			                        {
+				                        GridIndex = gridIndex,
+				                        TargetGridPosition = targetGridPosition
+			                        };
 
 			var intializeGridJobHandle = initializeGridJob.ScheduleParallel(state.Dependency);
 			intializeGridJobHandle.Complete();
@@ -264,15 +277,15 @@ public partial struct GridSystem : ISystem
 			var collisionWorld = physicsWorldSingleton.PhysicsWorld.CollisionWorld;
 
 			var updateCostMapJob = new UpdateCostMapJob
-			{
-				Width = gridSystemData.Width,
-				CellSize = gridSystemData.CellSize,
-				HalfCellSize = gridSystemData.CellSize * 0.5f,
-				CollisionWorld = collisionWorld,
-				GridMap = gridSystemData.GridMapArray[gridIndex],
-				GridCostArray = gridSystemData.GridCostArray,
-				GridNodeLookup = GridNodeLookup
-			};
+			                       {
+				                       Width = gridSystemData.Width,
+				                       CellSize = gridSystemData.CellSize,
+				                       HalfCellSize = gridSystemData.CellSize * 0.5f,
+				                       CollisionWorld = collisionWorld,
+				                       GridMap = gridSystemData.GridMapArray[gridIndex],
+				                       GridCostArray = gridSystemData.GridCostArray,
+				                       GridNodeLookup = GridNodeLookup
+			                       };
 
 			var updateCostMapJobHandle = updateCostMapJob.ScheduleParallel(gridSystemData.Width * gridSystemData.Height, 50, state.Dependency);
 			updateCostMapJobHandle.Complete();
@@ -372,7 +385,7 @@ public partial struct InitializeGridJob : IJobEntity
 }
 
 [BurstCompile]
-public partial struct UpdateCostMapJob : IJobFor
+public struct UpdateCostMapJob : IJobFor
 {
 	[NativeDisableParallelForRestriction] public ComponentLookup<GridSystem.GridNode> GridNodeLookup;
 	[ReadOnly] public GridSystem.GridMap GridMap;
@@ -390,9 +403,9 @@ public partial struct UpdateCostMapJob : IJobFor
 		var gridPosition = GridSystem.GetGridPositionFromIndex(index, Width);
 		// for walls
 		if (CollisionWorld.OverlapSphere(GridSystem.GetWorldCenterPosition(gridPosition.x, gridPosition.y, CellSize),
-										 HalfCellSize,
-										 ref distanceHitList,
-										 GameConfig.PathfindingWallCollisionFilter))
+		                                 HalfCellSize,
+		                                 ref distanceHitList,
+		                                 GameConfig.PathfindingWallCollisionFilter))
 		{
 			var gridNode = GridNodeLookup[GridMap.GridEntityArray[index]];
 			gridNode.Cost = GridSystem.WALL_COST;
@@ -403,9 +416,9 @@ public partial struct UpdateCostMapJob : IJobFor
 
 		// for heavy
 		if (CollisionWorld.OverlapSphere(GridSystem.GetWorldCenterPosition(gridPosition.x, gridPosition.y, CellSize),
-										 HalfCellSize,
-										 ref distanceHitList,
-										 GameConfig.PathfindingHeavyCollisionFilter))
+		                                 HalfCellSize,
+		                                 ref distanceHitList,
+		                                 GameConfig.PathfindingHeavyCollisionFilter))
 		{
 			var gridNode = GridNodeLookup[GridMap.GridEntityArray[index]];
 			gridNode.Cost = GridSystem.HEAVY_COST;

@@ -10,6 +10,7 @@ internal partial struct MeleeAttackSystem : ISystem
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<PhysicsWorldSingleton>();
+		state.RequireForUpdate<GameSceneTag>();
 	}
 
 	[BurstCompile]
@@ -19,7 +20,7 @@ internal partial struct MeleeAttackSystem : ISystem
 		var collisionWorld = physicsWorldSingleton.CollisionWorld;
 		var raycastHitList = new NativeList<RaycastHit>(Allocator.Temp);
 		foreach (var (localTransform, target, meleeAttack, targetPositionPathQueued, targetPositionPathQueuedEnabled)
-				 in SystemAPI.Query<RefRO<LocalTransform>, RefRO<Target>, RefRW<MeleeAttack>, RefRW<TargetPositionPathQueued>, EnabledRefRW<TargetPositionPathQueued>>().WithDisabled<MoveOverride>().WithPresent<TargetPositionPathQueued>())
+		         in SystemAPI.Query<RefRO<LocalTransform>, RefRO<Target>, RefRW<MeleeAttack>, RefRW<TargetPositionPathQueued>, EnabledRefRW<TargetPositionPathQueued>>().WithDisabled<MoveOverride>().WithPresent<TargetPositionPathQueued>())
 		{
 			if (target.ValueRO.TargetEntity == Entity.Null)
 			{
@@ -36,11 +37,11 @@ internal partial struct MeleeAttackSystem : ISystem
 				var directionToTarget = math.normalize(targetLocalTransform.Position - localTransform.ValueRO.Position);
 				var offset = 0.1f;
 				var raycastInput = new RaycastInput
-				{
-					Start = localTransform.ValueRO.Position,
-					End = localTransform.ValueRO.Position + directionToTarget * (meleeAttack.ValueRO.ColliderSize + offset),
-					Filter = GameConfig.MeleeAttackCollisionFilter
-				};
+				                   {
+					                   Start = localTransform.ValueRO.Position,
+					                   End = localTransform.ValueRO.Position + directionToTarget * (meleeAttack.ValueRO.ColliderSize + offset),
+					                   Filter = GameConfig.MeleeAttackCollisionFilter
+				                   };
 				raycastHitList.Clear();
 				if (collisionWorld.CastRay(raycastInput, ref raycastHitList))
 				{

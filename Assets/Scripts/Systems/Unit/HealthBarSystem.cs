@@ -20,6 +20,7 @@ internal partial struct HealthBarSystem : ISystem
 		_localTransformLookup = state.GetComponentLookup<LocalTransform>();
 		_healthLookup = state.GetComponentLookup<Health>(true);
 		_postTransformMatrixLookup = state.GetComponentLookup<PostTransformMatrix>();
+		state.RequireForUpdate<GameSceneTag>();
 	}
 
 	public void OnUpdate(ref SystemState state)

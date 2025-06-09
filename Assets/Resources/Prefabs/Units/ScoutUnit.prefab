@@ -301,8 +301,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c213f80f8238ba340804e2ebd04e77a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 0.3
-  damageAmount: 2
+  cooldown: 0.5
+  damageAmount: 7
   nuzzle: {fileID: 5757704311418296502}
 --- !u!114 &4626826308338028288
 MonoBehaviour:

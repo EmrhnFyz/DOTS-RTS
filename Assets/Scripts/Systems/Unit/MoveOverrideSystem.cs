@@ -6,6 +6,12 @@ using Unity.Transforms;
 internal partial struct MoveOverrideSystem : ISystem
 {
 	[BurstCompile]
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<GameSceneTag>();
+	}
+
+	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
 		foreach (var (localTransform, moveOverride, moveOverrideEnabled, unitMover) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<MoveOverride>, EnabledRefRW<MoveOverride>, RefRW<UnitMover>>())

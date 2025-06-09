@@ -12,7 +12,10 @@ internal partial struct ResetTargetSystem : ISystem
 	[BurstCompile]
 	public void OnCreate(ref SystemState state)
 	{
+		state.RequireForUpdate<GameSceneTag>();
+
 		_localTransformLookup = state.GetComponentLookup<LocalTransform>(true);
+
 		_entityStorageInfoLookup = state.GetEntityStorageInfoLookup();
 	}
 

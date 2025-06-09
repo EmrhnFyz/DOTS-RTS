@@ -6,6 +6,7 @@ internal partial struct ShootLightDestroySystem : ISystem
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+		state.RequireForUpdate<GameSceneTag>();
 	}
 
 	[BurstCompile]

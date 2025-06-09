@@ -8,6 +8,7 @@ internal partial struct LoseTargetSystem : ISystem
 	[BurstCompile]
 	public void OnCreate(ref SystemState state)
 	{
+		state.RequireForUpdate<GameSceneTag>();
 	}
 
 	[BurstCompile]

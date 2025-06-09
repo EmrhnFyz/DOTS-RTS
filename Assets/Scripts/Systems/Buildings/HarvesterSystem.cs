@@ -1,26 +1,25 @@
 using Unity.Burst;
 using Unity.Entities;
-using Unity.Transforms;
 
-partial struct HarvesterSystem : ISystem
+internal partial struct HarvesterSystem : ISystem
 {
-    [BurstCompile]
-    public void OnCreate(ref SystemState state)
-    {
+	[BurstCompile]
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<GameSceneTag>();
+	}
 
-    }
+	public void OnUpdate(ref SystemState state)
+	{
+		foreach (var harvester in SystemAPI.Query<RefRW<Harvester>>())
+		{
+			harvester.ValueRW.HarvestTimer -= SystemAPI.Time.DeltaTime;
+			if (harvester.ValueRO.HarvestTimer <= 0f)
+			{
+				harvester.ValueRW.HarvestTimer = harvester.ValueRO.Cooldown;
 
-    public void OnUpdate(ref SystemState state)
-    {
-        foreach (var harvester in SystemAPI.Query<RefRW<Harvester>>())
-        {
-            harvester.ValueRW.HarvestTimer -= SystemAPI.Time.DeltaTime;
-            if (harvester.ValueRO.HarvestTimer <= 0f)
-            {
-                harvester.ValueRW.HarvestTimer = harvester.ValueRO.Cooldown;
-
-                ResourceManager.Instance.AddResource(harvester.ValueRO.ResourceType, harvester.ValueRO.HarvestRate);
-            }
-        }
-    }
+				ResourceManager.Instance.AddResource(harvester.ValueRO.ResourceType, harvester.ValueRO.HarvestRate);
+			}
+		}
+	}
 }

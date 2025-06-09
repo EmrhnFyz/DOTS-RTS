@@ -5,6 +5,12 @@ using Unity.Entities;
 internal partial struct RestTargetSystem : ISystem
 {
 	[BurstCompile]
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<GameSceneTag>();
+	}
+
+	[BurstCompile]
 	public void OnUpdate(ref SystemState state)
 	{
 		foreach (var target in SystemAPI.Query<RefRW<Target>>())

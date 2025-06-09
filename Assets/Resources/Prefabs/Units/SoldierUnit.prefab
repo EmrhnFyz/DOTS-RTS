@@ -310,7 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cooldown: 0.2
-  damageAmount: 4
+  damageAmount: 5
   nuzzle: {fileID: 5757704311418296502}
 --- !u!114 &4626826308338028288
 MonoBehaviour:

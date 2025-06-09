@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Rendering;
@@ -8,6 +9,12 @@ using Unity.Rendering;
 [UpdateInGroup(typeof(PostBakingSystemGroup))]
 internal partial struct AnimationDataHolderBakingSystem : ISystem
 {
+	[BurstCompile]
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<AnimationDataHolderObjectData>();
+	}
+
 	public void OnUpdate(ref SystemState state)
 	{
 		AnimationDataListSO animationDataListSO = null;

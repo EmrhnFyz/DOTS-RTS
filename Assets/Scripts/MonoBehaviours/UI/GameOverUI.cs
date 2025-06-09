@@ -1,13 +1,21 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEventKit;
 
 public class GameOverUI : MonoBehaviour
 {
 	[SerializeField] private VoidEventChannelSO _onHQDeathEventChannel;
+	[SerializeField] private Button _mainMenuButton;
 
 	private void Start()
 	{
 		Hide();
+		_mainMenuButton.onClick.AddListener(() =>
+		{
+			Time.timeScale = 1f; // Resume the game
+			SceneManager.LoadScene(0);
+		});
 	}
 
 	private void OnEnable()

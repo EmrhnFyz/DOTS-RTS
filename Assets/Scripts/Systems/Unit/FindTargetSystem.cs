@@ -13,6 +13,8 @@ internal partial struct FindTargetSystem : ISystem
 	public void OnCreate(ref SystemState state)
 	{
 		state.RequireForUpdate<PhysicsWorldSingleton>();
+		state.RequireForUpdate<GameSceneTag>();
+
 		_factionLookup = SystemAPI.GetComponentLookup<Faction>(true);
 		_targetLocalTransformLookup = SystemAPI.GetComponentLookup<LocalTransform>(true);
 	}
