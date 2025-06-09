@@ -13,6 +13,7 @@ public enum UnitType
 public class UnitTypeSO : ScriptableObject
 {
 	public UnitType unitType;
+	public Transform ragdollPrefab;
 	public float spawnTime;
 	public ResourceAmount[] cost;
 

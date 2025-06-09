@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Soldier
   m_EditorClassIdentifier: 
   unitType: 2
+  ragdollPrefab: {fileID: 5652258127020223550, guid: 04092e2efed0fe64e9e32e77adcc98de, type: 3}
   spawnTime: 2
   cost:
   - ResourceType: 1

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Scout
   m_EditorClassIdentifier: 
   unitType: 1
+  ragdollPrefab: {fileID: 933338794022944140, guid: 9bd1995aa59a0bc4ea0e7686b31f9ea7, type: 3}
   spawnTime: 1
   cost:
   - ResourceType: 1

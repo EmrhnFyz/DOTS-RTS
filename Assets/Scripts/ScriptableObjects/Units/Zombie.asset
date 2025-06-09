@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Zombie
   m_EditorClassIdentifier: 
   unitType: 3
+  ragdollPrefab: {fileID: 8429865231615740692, guid: 060960e617830c0488f5b81c9381461b, type: 3}
   spawnTime: 1
+  cost: []
