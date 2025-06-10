@@ -6,6 +6,10 @@ It leverages the **Entity Component System (ECS)**, **C# Job System**, and **Bur
 The focus is on showcasing complex RTS gameplay systems such as pathfinding, unit production, resource collection, combat, and more implemented in a fully data-oriented way,
 while overcoming technical limitations such as the lack of built-in animation support in DOTS.
 
+
+https://github.com/user-attachments/assets/3f27711d-345b-454e-a194-3081cd2924b9
+
+
 ---
 
 ## 🔧 Key Technical Features
