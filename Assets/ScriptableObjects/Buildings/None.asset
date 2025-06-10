@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 601f4884c50a73d40bdfe30636b99ef8, type: 3}
   m_Name: None
   m_EditorClassIdentifier: 
+  NameString: Cancel Placement
   buildingType: 0
-  buildingTransform: {fileID: 0}
   buildingCollider: {fileID: 0}
   isPlaceable: 1
   iconSprite: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  visualPrefab: {fileID: 0}
+  cost: []
+  constructionTimerMax: 0
+  constructionYOffset: 0

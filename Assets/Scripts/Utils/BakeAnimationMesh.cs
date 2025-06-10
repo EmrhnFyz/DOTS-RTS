@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class BakeAndCombineAnimationMesh : MonoBehaviour
 {
 	[SerializeField] private Animator animator;
@@ -63,3 +64,4 @@ public class BakeAndCombineAnimationMesh : MonoBehaviour
 		Debug.Log("All frames baked and submeshes merged.");
 	}
 }
+#endif

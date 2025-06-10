@@ -16,6 +16,20 @@ public class DOTSEventManager : MonoBehaviour
 		public OnDeathEvent(Entity entity) => Entity = entity;
 	}
 
+	public readonly struct OnHordeStartSpawningSoonEvent : IEvent
+	{
+		public readonly Entity HordeEntity;
+
+		public OnHordeStartSpawningSoonEvent(Entity hordeEntity) => HordeEntity = hordeEntity;
+	}
+
+	public readonly struct OnHordeStartSpawningEvent : IEvent
+	{
+		public readonly Entity HordeEntity;
+
+		public OnHordeStartSpawningEvent(Entity hordeEntity = default) => HordeEntity = hordeEntity;
+	}
+
 	private void Awake()
 	{
 		Instance = this;
@@ -31,6 +45,22 @@ public class DOTSEventManager : MonoBehaviour
 		foreach (var entity in entityNativeList)
 		{
 			EventBus.Global.Publish(new OnDeathEvent(entity));
+		}
+	}
+
+	public void TriggerOnHordeStartSpawningSoon(NativeList<Entity> hordeEntities)
+	{
+		foreach (var hordeEntity in hordeEntities)
+		{
+			EventBus.Global.Publish(new OnHordeStartSpawningSoonEvent(hordeEntity));
+		}
+	}
+
+	public void TriggerOnHordeStartSpawning(NativeList<Entity> hordeEntities)
+	{
+		foreach (var hordeEntity in hordeEntities)
+		{
+			EventBus.Global.Publish(new OnHordeStartSpawningEvent(hordeEntity));
 		}
 	}
 }

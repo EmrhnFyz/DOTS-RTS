@@ -35,7 +35,8 @@ internal partial struct VisualUnderFoWSystem : ISystem
 		                        {
 			                        EndSimulationEntityCommandBuffer = endSimulationEntityCommandBuffer.AsParallelWriter(),
 			                        CollisionWorld = collisionWorld,
-			                        LocalTransformLookup = _localTransformLookup
+			                        LocalTransformLookup = _localTransformLookup,
+			                        DeltaTime = SystemAPI.Time.DeltaTime
 		                        };
 
 		visualUnderFoWJob.ScheduleParallel();
@@ -54,11 +55,21 @@ public partial struct VisualUnderFogOfWarJob : IJobEntity
 	[ReadOnly] public CollisionWorld CollisionWorld;
 	[ReadOnly] public ComponentLookup<LocalTransform> LocalTransformLookup;
 
+	[ReadOnly] public float DeltaTime;
+
 	public void Execute(ref VisualUnderFoW visualUnderFoW, [ChunkIndexInQuery] int chunkIndexInQuery, Entity entity)
 	{
+		visualUnderFoW.Timer -= DeltaTime;
+		if (visualUnderFoW.Timer > 0)
+		{
+			return; // still in cooldown
+		}
+
+		visualUnderFoW.Timer += visualUnderFoW.Cooldown;
+
 		var parentLocalTransform = LocalTransformLookup[visualUnderFoW.ParentEntity];
 
-		if (!CollisionWorld.SphereCast(parentLocalTransform.Position, visualUnderFoW.sphereCastSize, new float3(0, 1, 0), 100, GameConfig.FOWCollisionFilter))
+		if (!CollisionWorld.SphereCast(parentLocalTransform.Position, visualUnderFoW.SphereCastSize, new float3(0, 1, 0), 100, GameConfig.FOWCollisionFilter))
 		{
 			// not under fow
 			if (visualUnderFoW.IsVisible)

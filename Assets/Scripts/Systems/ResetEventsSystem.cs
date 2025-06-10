@@ -9,6 +9,8 @@ internal partial struct ResetEventsSystem : ISystem
 	private NativeArray<JobHandle> _jobHandleNativeArray;
 
 	private NativeList<Entity> _onDeathEntityList;
+	private NativeList<Entity> _onHordeStartSpawningSoonEntityList;
+	private NativeList<Entity> _onHordeStartSpawningEntityList;
 
 	[BurstCompile]
 	public void OnCreate(ref SystemState state)
@@ -18,6 +20,8 @@ internal partial struct ResetEventsSystem : ISystem
 
 		_jobHandleNativeArray = new NativeArray<JobHandle>(3, Allocator.Persistent);
 		_onDeathEntityList = new NativeList<Entity>(Allocator.Persistent);
+		_onHordeStartSpawningSoonEntityList = new NativeList<Entity>(Allocator.Persistent);
+		_onHordeStartSpawningEntityList = new NativeList<Entity>(Allocator.Persistent);
 	}
 
 	public void OnUpdate(ref SystemState state)
@@ -36,6 +40,17 @@ internal partial struct ResetEventsSystem : ISystem
 		_jobHandleNativeArray[1] = new ResetShootEventsJob().ScheduleParallel(state.Dependency);
 		_jobHandleNativeArray[2] = new ResetMeleeAttackEventsJob().ScheduleParallel(state.Dependency);
 
+		_onHordeStartSpawningEntityList.Clear();
+		_onHordeStartSpawningSoonEntityList.Clear();
+
+		new ResetHordeEventsJob
+		{
+			OnHordeStartSpawningSoonEntityList = _onHordeStartSpawningSoonEntityList.AsParallelWriter(),
+			OnHordeStartSpawningEntityList = _onHordeStartSpawningEntityList.AsParallelWriter()
+		}.ScheduleParallel(state.Dependency).Complete();
+		DOTSEventManager.Instance.TriggerOnHordeStartSpawningSoon(_onHordeStartSpawningSoonEntityList);
+		DOTSEventManager.Instance.TriggerOnHordeStartSpawning(_onHordeStartSpawningEntityList);
+
 		_onDeathEntityList.Clear();
 		new ResetHealthEventsJob
 		{
@@ -51,6 +66,8 @@ internal partial struct ResetEventsSystem : ISystem
 	{
 		_jobHandleNativeArray.Dispose();
 		_onDeathEntityList.Dispose();
+		_onHordeStartSpawningSoonEntityList.Dispose();
+		_onHordeStartSpawningEntityList.Dispose();
 	}
 }
 
@@ -98,5 +115,28 @@ public partial struct ResetMeleeAttackEventsJob : IJobEntity
 	public void Execute(ref MeleeAttack meleeAttack)
 	{
 		meleeAttack.OnAttacked = false;
+	}
+}
+
+[BurstCompile]
+public partial struct ResetHordeEventsJob : IJobEntity
+{
+	public NativeList<Entity>.ParallelWriter OnHordeStartSpawningSoonEntityList;
+	public NativeList<Entity>.ParallelWriter OnHordeStartSpawningEntityList;
+
+	public void Execute(ref Horde horde, Entity entity)
+	{
+		if (horde.OnStartSpawningSoon)
+		{
+			OnHordeStartSpawningSoonEntityList.AddNoResize(entity);
+		}
+
+		if (horde.OnStartSpawning)
+		{
+			OnHordeStartSpawningEntityList.AddNoResize(entity);
+		}
+
+		horde.OnStartSpawningSoon = false;
+		horde.OnStartSpawning = false;
 	}
 }

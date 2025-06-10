@@ -10,19 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 601f4884c50a73d40bdfe30636b99ef8, type: 3}
-  m_Name: Barracks
+  m_Name: Turret
   m_EditorClassIdentifier: 
-  buildingType: 3
-  buildingCollider: {fileID: 8540861761137622344, guid: c863f27c53b7eda438cb40056a3cf7b1, type: 3}
+  NameString: Turret
+  buildingType: 2
+  buildingCollider: {fileID: 1884475337877019814, guid: db6a101469fde9242ae3d35156a93717, type: 3}
   isPlaceable: 1
-  iconSprite: {fileID: 21300000, guid: 45a19f8a4b4c49f469a06544e37458cf, type: 3}
-  visualPrefab: {fileID: 1798000005016949513, guid: 2591709d1978df649aebd5b6b0a68773, type: 3}
+  iconSprite: {fileID: 21300000, guid: 77f584958901eb64b8f9d4b9dc488ae3, type: 3}
+  visualPrefab: {fileID: 5873452033065476159, guid: 44ef29094a986954ab87829217222b22, type: 3}
   cost:
   - ResourceType: 1
-    Amount: 30
-  - ResourceType: 2
-    Amount: 15
-  - ResourceType: 3
     Amount: 10
+  - ResourceType: 2
+    Amount: 5
   constructionTimerMax: 10
-  constructionYOffset: -3.52
+  constructionYOffset: -3.58

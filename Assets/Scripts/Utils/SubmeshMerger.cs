@@ -2,6 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class BatchSubmeshMerger
 {
 	[MenuItem("Tools/Merge Submeshes In Selected Folder")]
@@ -75,3 +76,4 @@ public class BatchSubmeshMerger
 		Debug.Log($"✅ Merged {mergedCount} mesh(es) into their respective Merged subfolders.");
 	}
 }
+#endif

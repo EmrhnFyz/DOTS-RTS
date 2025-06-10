@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using Unity.Entities;
 using UnityEngine;
 
@@ -18,6 +17,7 @@ public enum BuildingType
 [CreateAssetMenu(fileName = "BuildingTypeSO", menuName = "ScriptableObjects/Buildings/BuildingTypeSO")]
 public class BuildingTypeSO : ScriptableObject
 {
+	public string NameString;
 	public BuildingType buildingType;
 	public BoxCollider buildingCollider;
 

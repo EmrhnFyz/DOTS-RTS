@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71503c762c38b1c48b911157d966e1dd, type: 3}
   m_Name: GoldHarvester
   m_EditorClassIdentifier: 
+  NameString: Gold Harvester
   buildingType: 5
   buildingCollider: {fileID: 2589775983593710231, guid: a8243029b65dbbc468ce7c5590816dc1, type: 3}
   isPlaceable: 1

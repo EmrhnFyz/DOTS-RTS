@@ -88,6 +88,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6151115344386756265, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6193176710345390012, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -95,6 +99,10 @@ PrefabInstance:
     - target: {fileID: 6673234106719524852, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: range
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6673234106719524852, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
+      propertyPath: cooldown
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 6800274520417428555, guid: 88e6e3faf6ec7a34fa519acce709b373, type: 3}
       propertyPath: loseTargetDistance

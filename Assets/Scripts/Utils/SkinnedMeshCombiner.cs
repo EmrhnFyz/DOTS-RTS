@@ -2,6 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 public class SkinnedMeshCombiner : MonoBehaviour
 {
 	[MenuItem("Tools/Merge Skinned Meshes")]
@@ -51,3 +52,4 @@ public class SkinnedMeshCombiner : MonoBehaviour
 		Debug.Log("Merged SkinnedMeshRenderers into one.");
 	}
 }
+#endif

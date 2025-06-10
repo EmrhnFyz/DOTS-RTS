@@ -22,6 +22,10 @@ public class BuildingPlacementManager : MonoBehaviour
 
 	private Transform ghostTransform;
 	[SerializeField] private Material ghostMaterial;
+	[SerializeField] private Material ghostRedMaterial;
+
+	private Material _activeGhostMaterial;
+
 
 	private void Awake()
 	{
@@ -53,6 +57,38 @@ public class BuildingPlacementManager : MonoBehaviour
 		if (ghostTransform)
 		{
 			ghostTransform.position = MouseWorldPosition.Instance.GetMousePosition();
+
+			if (!ResourceManager.Instance.CanAfford(buildingTypeSO.cost))
+			{
+				SetGhostMaterial(ghostRedMaterial);
+				TooltipScreenSpaceUI.ShowTooltip_Static(
+					buildingTypeSO.NameString + "\n" +
+					ResourceAmount.GetString(buildingTypeSO.cost) + "\n" +
+					"<color=#ff0000>Cannot afford resource cost!</color>", 0.5f);
+			}
+			else
+			{
+				SetGhostMaterial(ghostMaterial);
+				TooltipScreenSpaceUI.ShowTooltip_Static(
+					buildingTypeSO.NameString + "\n" +
+					ResourceAmount.GetString(buildingTypeSO.cost), 0.5f);
+			}
+
+			if (!CanPlaceBuilding())
+			{
+				// Cannot place building here
+				SetGhostMaterial(ghostRedMaterial);
+				TooltipScreenSpaceUI.ShowTooltip_Static(
+					buildingTypeSO.NameString + "\n" +
+					ResourceAmount.GetString(buildingTypeSO.cost) + "\n" +
+					"<color=#ff0000>" + "Cant Place Building Here" + "</color>", 0.5f);
+			}
+			else
+			{
+				TooltipScreenSpaceUI.ShowTooltip_Static(
+					buildingTypeSO.NameString + "\n" +
+					ResourceAmount.GetString(buildingTypeSO.cost), .05f);
+			}
 		}
 	}
 
@@ -102,8 +138,24 @@ public class BuildingPlacementManager : MonoBehaviour
 			return;
 		}
 
+		if (buildingTypeSO.buildingType == BuildingType.None)
+		{
+			return;
+		}
+
+		TooltipScreenSpaceUI.ShowTooltip_Static(
+			buildingTypeSO.NameString + "\n" +
+			ResourceAmount.GetString(buildingTypeSO.cost), .05f);
+
+		if (!ResourceManager.Instance.CanAfford(buildingTypeSO.cost))
+		{
+			return;
+		}
+
 		if (CanPlaceBuilding())
 		{
+			SetGhostMaterial(ghostMaterial);
+
 			var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
 
 
@@ -120,22 +172,37 @@ public class BuildingPlacementManager : MonoBehaviour
 			entityManager.SetComponentData(spawnedConstructionEntity, LocalTransform.FromPosition(mouseWorldPosition));
 
 			entityManager.SetComponentData(spawnedConstructionEntity, new Construction
-			{
-				BuildingType = buildingTypeSO.buildingType,
-				ConstructionTimer = 0f,
-				ConstructionTimeMax = buildingTypeSO.constructionTimerMax,
-				FinalPrefabEntity = buildingTypeSO.GetBuildingPrefabEntity(entityReferences),
-				VisualEntity = spawnedConstructionVisualEntity,
-				StartPosition = mouseWorldPosition + new Vector3(0, buildingTypeSO.constructionYOffset, 0),
-				EndPosition = mouseWorldPosition
-			});
+			                                                          {
+				                                                          BuildingType = buildingTypeSO.buildingType,
+				                                                          ConstructionTimer = 0f,
+				                                                          ConstructionTimeMax = buildingTypeSO.constructionTimerMax,
+				                                                          FinalPrefabEntity = buildingTypeSO.GetBuildingPrefabEntity(entityReferences),
+				                                                          VisualEntity = spawnedConstructionVisualEntity,
+				                                                          StartPosition = mouseWorldPosition + new Vector3(0, buildingTypeSO.constructionYOffset, 0),
+				                                                          EndPosition = mouseWorldPosition
+			                                                          });
+		}
+	}
 
+	private void SetGhostMaterial(Material ghostMaterial)
+	{
+		if (_activeGhostMaterial == ghostMaterial)
+		{
+			// Already set this material
+			return;
+		}
+
+		_activeGhostMaterial = ghostMaterial;
+
+		foreach (var meshRenderer in ghostTransform.GetComponentsInChildren<MeshRenderer>())
+		{
+			meshRenderer.material = ghostMaterial;
 		}
 	}
 
 	private bool CanPlaceBuilding()
 	{
-		if (!buildingTypeSO || !buildingTypeSO.isPlaceable || buildingTypeSO.buildingType == BuildingType.None || !ResourceManager.Instance.CanAfford(buildingTypeSO.cost))
+		if (!buildingTypeSO || !buildingTypeSO.isPlaceable || buildingTypeSO.buildingType == BuildingType.None)
 		{
 			return false;
 		}
@@ -156,11 +223,11 @@ public class BuildingPlacementManager : MonoBehaviour
 			var hasValidResource = false;
 			var mouseWorldPosition = MouseWorldPosition.Instance.GetMousePosition();
 			if (collisionWorld.OverlapSphere(
-				mouseWorldPosition,
-				resourceHarvesterTypeSO.harvestDistance,
-				ref distanceHitList,
-				GameConfig.BuildingPlacementCollisionFilter
-			))
+				    mouseWorldPosition,
+				    resourceHarvesterTypeSO.harvestDistance,
+				    ref distanceHitList,
+				    GameConfig.BuildingPlacementCollisionFilter
+			    ))
 			{
 				// hit something within harvest distance
 				foreach (var distanceHit in distanceHitList)

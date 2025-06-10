@@ -14,61 +14,63 @@ public class GameConfig : MonoBehaviour
 	public const float REACH_TARGET_DISTANCE_SQ = 0.01f; // Squared distance to consider the target reached
 	public const float TARGET_PROXIMITY_TRESHOLD = 3f; // Distance threshold to consider a target nearby
 	public const float MAX_RAY_DISTANCE = 9999f;
+	public const float VISUAL_UNDER_FOW_COOLDOWN = 0.2f; // Cooldown for visual under fog of war update
 
+	public const float HORDE_START_SPAWNING_SOON_TIME = 15f; // Time before a horde starts spawning soon
 	public static GameConfig Instance { get; private set; }
 	public static Camera CachedCamera { get; private set; } // Cached camera reference
 
 	public static readonly CollisionFilter UnitSelectionCollisionFilter = new()
-	{
-		BelongsTo = ~0u,
-		CollidesWith = 1u << UNIT_LAYER,
-		GroupIndex = 0
-	};
+	                                                                      {
+		                                                                      BelongsTo = ~0u,
+		                                                                      CollidesWith = 1u << UNIT_LAYER,
+		                                                                      GroupIndex = 0
+	                                                                      };
 
 	/// <summary>
 	///     This collision filter is used for faction related entities like units and buildings.
 	/// </summary>
 	public static readonly CollisionFilter FactionSelectionCollisionFilter = new()
-	{
-		BelongsTo = ~0u,
-		CollidesWith = (1u << UNIT_LAYER) | (1u << BUILDING_LAYER),
-		GroupIndex = 0
-	};
+	                                                                         {
+		                                                                         BelongsTo = ~0u,
+		                                                                         CollidesWith = (1u << UNIT_LAYER) | (1u << BUILDING_LAYER),
+		                                                                         GroupIndex = 0
+	                                                                         };
 
 	public static readonly CollisionFilter BuildingPlacementCollisionFilter = new()
-	{
-		BelongsTo = ~0u,
-		CollidesWith = (1u << BUILDING_LAYER) | (1u << DEFAULT_LAYER),
-		GroupIndex = 0
-	};
+	                                                                          {
+		                                                                          BelongsTo = ~0u,
+		                                                                          CollidesWith = (1u << BUILDING_LAYER) | (1u << DEFAULT_LAYER),
+		                                                                          GroupIndex = 0
+	                                                                          };
 
 	public static readonly CollisionFilter PathfindingWallCollisionFilter = new()
-	{
-		BelongsTo = ~0u,
-		CollidesWith = 1u << PATHFINDING_WALLS,
-		GroupIndex = 0
-	};
+	                                                                        {
+		                                                                        BelongsTo = ~0u,
+		                                                                        CollidesWith = 1u << PATHFINDING_WALLS,
+		                                                                        GroupIndex = 0
+	                                                                        };
 
 	public static readonly CollisionFilter PathfindingHeavyCollisionFilter = new()
-	{
-		BelongsTo = ~0u,
-		CollidesWith = 1u << PATHFINDING_HEAVY,
-		GroupIndex = 0
-	};
+	                                                                         {
+		                                                                         BelongsTo = ~0u,
+		                                                                         CollidesWith = 1u << PATHFINDING_HEAVY,
+		                                                                         GroupIndex = 0
+	                                                                         };
 
 	public static readonly CollisionFilter MeleeAttackCollisionFilter = new()
-	{
-		BelongsTo = ~0u,
-		CollidesWith = 1u << UNIT_LAYER | 1u << BUILDING_LAYER,
-		GroupIndex = 0
-	};
+	                                                                    {
+		                                                                    BelongsTo = ~0u,
+		                                                                    CollidesWith = (1u << UNIT_LAYER) | (1u << BUILDING_LAYER),
+		                                                                    GroupIndex = 0
+	                                                                    };
 
 	public static readonly CollisionFilter FOWCollisionFilter = new()
-	{
-		BelongsTo = ~0u,
-		CollidesWith = 1u << FOW_LAYER,
-		GroupIndex = 0
-	};
+	                                                            {
+		                                                            BelongsTo = ~0u,
+		                                                            CollidesWith = 1u << FOW_LAYER,
+		                                                            GroupIndex = 0
+	                                                            };
 
 	[SerializeField] private BuildingTypeSOEventChannelSO onActiveBuildingTypeChangedEventChannel;
 

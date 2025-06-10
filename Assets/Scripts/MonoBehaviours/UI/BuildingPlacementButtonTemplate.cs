@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BuildingPlacementButtonTemplate : MonoBehaviour
+public class BuildingPlacementButtonTemplate : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 	[SerializeField] private GameObject selectedIndicator;
 	[SerializeField] private Image iconImage;
@@ -19,6 +20,23 @@ public class BuildingPlacementButtonTemplate : MonoBehaviour
 
 	public void SetSelected(bool isSelected)
 	{
+		if (!selectedIndicator)
+		{
+			return;
+		}
+
 		selectedIndicator.SetActive(isSelected);
+	}
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		TooltipScreenSpaceUI.ShowTooltip_Static(
+			buildingTypeSO.NameString + "\n" +
+			ResourceAmount.GetString(buildingTypeSO.cost), 99f);
+	}
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		TooltipScreenSpaceUI.HideTooltip_Static();
 	}
 }

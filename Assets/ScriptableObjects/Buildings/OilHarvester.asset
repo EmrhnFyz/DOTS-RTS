@@ -10,17 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71503c762c38b1c48b911157d966e1dd, type: 3}
-  m_Name: IronHarvester
+  m_Name: OilHarvester
   m_EditorClassIdentifier: 
-  buildingType: 6
-  buildingCollider: {fileID: 7433954576649532916, guid: 9770c5ce0a5bd6f4f86c739b75cb66c5, type: 3}
+  NameString: Oil Harvester
+  buildingType: 7
+  buildingCollider: {fileID: 5119422134439364525, guid: da864f7f88886414a8a2ea9c1e78848f, type: 3}
   isPlaceable: 1
-  iconSprite: {fileID: 21300000, guid: d68723ce033c83c45b0fd17e2ab8404d, type: 3}
-  visualPrefab: {fileID: 8686191080717679773, guid: 986eac81f4856df47bacc9ed8bf0ea6d, type: 3}
+  iconSprite: {fileID: 21300000, guid: 2c6c8a5b84bda9d4580c4d46edf40dce, type: 3}
+  visualPrefab: {fileID: 8278809462145260686, guid: 2e71adb493af6ac46980b7cb9775dd45, type: 3}
   cost:
+  - ResourceType: 1
+    Amount: 30
   - ResourceType: 2
-    Amount: 15
+    Amount: 30
   constructionTimerMax: 10
-  constructionYOffset: -2.81
-  resourceType: 1
+  constructionYOffset: -9
+  resourceType: 3
   harvestDistance: 10
